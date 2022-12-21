@@ -1,0 +1,16 @@
+version: '2.1'
+
+services:
+  postgresql:
+    container_name: postgresql
+    image: "postgres"
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "4000:5432"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "-upostgres", "-ppass", "ping", "-h", "postgresql" ]
+      timeout: 1s
+      retries: 30
