@@ -19,7 +19,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profile
         fields = [
-            'first_name', 'last_name', 'birth_date', 'sex', 'avatar', 'about_me',
+            'id', 'first_name', 'last_name', 'birth_date', 'sex', 'avatar', 'about_me',
             'employment', 'alcohol_attitude', 'smoking_attitude', 'sleep_time',
             'personality_type', 'clean_habits', 'interests'
         ]
@@ -32,7 +32,7 @@ class HousingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Housing
         fields = [
-            'month_price', 'host', 'description',
+            'month_price', 'host', 'description', 'photo',
             'bathrooms_count', 'bedrooms_count', 'housing_type', 'room_attributes', 'sharing_type'
         ]
 

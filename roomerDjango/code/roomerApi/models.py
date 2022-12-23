@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.datetime_safe import date
 
 from roomerApi import utils
 from roomerApi import managers
@@ -29,7 +28,7 @@ class Profile(AbstractUser):
 
     objects = managers.ProfileManager()
     REQUIRED_FIELDS = [
-            'birth_date', 'sex', 'avatar', 'about_me',
+            'id', 'birth_date', 'sex', 'avatar', 'about_me',
             'employment', 'alcohol_attitude', 'smoking_attitude', 'sleep_time',
             'personality_type', 'clean_habits', 'email', 'password'
         ]
@@ -44,6 +43,7 @@ class Housing(models.Model):
     housing_type = models.CharField(choices=utils.housing_type_choices, max_length=5)
     room_attributes = models.ManyToManyField(RoomAttribute)
     sharing_type = models.CharField(choices=utils.sharing_type_choices, max_length=1)
+    photo = models.ImageField(default='static/img/flat_default.jpeg')
 
 
 class Review(models.Model):

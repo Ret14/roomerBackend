@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3)0f)=4-9fsw#)a^o4$761b-ml#b!1ql_pons(qw7z7)f!e1!0'
+SECRET_KEY = 'django-insecure-fawi)4&k2iz*k9u7$qph5)d-j6qbb^ea7cnwc@r!&-vqn8apk*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,8 +83,8 @@ DATABASES = {
         'NAME': 'roomer',
         'USER': 'postgres',
         'PASSWORD': 'pass',
-        'HOST': 'localhost',
-        'PORT': '4000',
+        'HOST': 'postgresql',
+        'PORT': '5432',
     }
 }
 
@@ -99,8 +99,12 @@ REST_FRAMEWORK = {
 }
 
 # DJOSER = {
-#     'LOGIN_FIELD': 'email'
+#     'SERIALIZERS': {
+#          'user_create': 'roomerApi.serializers.UserRegistrationSerializer'
+#     }
 # }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

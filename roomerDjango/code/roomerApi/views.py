@@ -1,8 +1,4 @@
-from django.contrib.postgres.aggregates import ArrayAgg
-from django.shortcuts import render
 from rest_framework import permissions, viewsets
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from roomerApi import serializers
 from roomerApi import models
