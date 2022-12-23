@@ -27,11 +27,6 @@ class Profile(AbstractUser):
     interests = models.ManyToManyField('Interest', related_name='profiles', blank=True)
 
     objects = managers.ProfileManager()
-    REQUIRED_FIELDS = [
-            'id', 'birth_date', 'sex', 'avatar', 'about_me',
-            'employment', 'alcohol_attitude', 'smoking_attitude', 'sleep_time',
-            'personality_type', 'clean_habits', 'email', 'password'
-        ]
 
 
 class Housing(models.Model):

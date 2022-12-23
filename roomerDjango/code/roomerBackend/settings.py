@@ -98,11 +98,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-# DJOSER = {
-#     'SERIALIZERS': {
-#          'user_create': 'roomerApi.serializers.UserRegistrationSerializer'
-#     }
-# }
+DJOSER = {
+    'SERIALIZERS': {
+         'current_user': 'roomerApi.serializers.ProfileSerializer'
+    }
+}
 
 
 # Password validation
