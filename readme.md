@@ -38,7 +38,7 @@
 
     Request:
 
-    curl -X GET  http://127.0.0.1:8000/profile/?sex=M&employment=E&alcohol_attitude=N&
+    curl -X GET  http://176.113.83.93/profile/?sex=M&employment=E&alcohol_attitude=N&
                  smoking_attitude=N&sleep_time=N&personality_type=E&clean_habits=N
 
     Response:
@@ -96,7 +96,7 @@
     
     Request:
 
-    curl -X GET  http://127.0.0.1:8000/housing/?month_price_from=40000&month_price_to=90000&
+    curl -X GET  http://176.113.83.93/housing/?month_price_from=40000&month_price_to=90000&
                  bedrooms_count=>3&bathrooms_count=2&housing_type=DO&sharing_type=S
 
     Response:
@@ -130,6 +130,33 @@
         "bedrooms_count": 4,
         "housing_type": "F",
         "room_attributes": [],
-        "sharing_type": "P"
+        "sharing_type": "P",
+        "photo": "http://176.113.83.93:8000/static/img/flat_default.jpeg"
     }
     ]
+
+**Authorized user info:**
+    
+    Request:
+
+    curl -X GET http://176.113.83.93:8000/auth/users/me/ -H 'Authorization: Token c0d68713b6753ea14ac12f9b6ca96df6f4b51457'
+
+    Response:
+
+    {
+        "id":16,
+        "first_name":"",
+        "last_name":"",
+        "birth_date":"2022-12-23",
+        "sex":"F",
+        "avatar":"http://176.113.83.93:8000/static/img/default.png",
+        "email":"seconnduser11@mail.ru",
+        "about_me":"I'm good",
+        "employment":"E",
+        "alcohol_attitude":"N",
+        "smoking_attitude":"N",
+        "sleep_time":"N",
+        "personality_type":"E",
+        "clean_habits":"N",
+        "interests":[]
+    }
