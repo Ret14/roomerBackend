@@ -3,7 +3,7 @@ import string
 import traceback
 from django.core.management.base import BaseCommand
 from faker import Faker
-from faker.providers import internet, lorem, person
+from faker.providers import internet, lorem, person, geo
 from roomerApi import models
 
 
@@ -21,6 +21,8 @@ class Command(BaseCommand):
         self.fake.add_provider(internet)
         self.fake.add_provider(lorem)
         self.fake.add_provider(person)
+        self.fake.add_provider(geo)
+
         try:
             self.create_interests(ratio)
             self.create_profiles(ratio)
@@ -45,12 +47,6 @@ class Command(BaseCommand):
         ]
         models.Interest.objects.bulk_create(interests)
 
-    # def create_tags(self, amount):
-    #     tags = [Tag(tag=self.create_random_string(5, 20))
-    #             for _ in range(amount)]
-    #
-    #     Tag.objects.bulk_create(tags)
-    #
     def create_profiles(self, amount):
         sex_field_choices = ('M', 'F')
         attitude_choices = ('P', 'N', 'I')
@@ -103,6 +99,8 @@ class Command(BaseCommand):
                            bathrooms_count=random.randint(1, 5),
                            housing_type=random.choice(housing_type_choices),
                            sharing_type=random.choice(sharing_type_choices),
+                           title=self.fake.text(max_nb_chars=random.randint(50, 150)),
+                           location=' '.join(self.fake.location_on_land())
                            )
             for number in range(amount)]
 

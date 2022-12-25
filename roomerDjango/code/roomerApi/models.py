@@ -30,6 +30,7 @@ class Profile(AbstractUser):
 
 
 class Housing(models.Model):
+    title = models.CharField(max_length=150)
     month_price = models.IntegerField()
     host = models.ForeignKey(Profile, on_delete=models.CASCADE)
     description = models.CharField(max_length=1000)
@@ -39,6 +40,7 @@ class Housing(models.Model):
     room_attributes = models.ManyToManyField(RoomAttribute)
     sharing_type = models.CharField(choices=utils.sharing_type_choices, max_length=1)
     photo = models.ImageField(default='static/img/flat_default.jpeg')
+    location = models.CharField(max_length=200)
 
 
 class Review(models.Model):

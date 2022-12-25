@@ -32,7 +32,7 @@ class HousingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Housing
         fields = [
-            'month_price', 'host', 'description', 'photo',
+            'month_price', 'host', 'description', 'photo', 'title', 'location',
             'bathrooms_count', 'bedrooms_count', 'housing_type', 'room_attributes', 'sharing_type'
         ]
 
