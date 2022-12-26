@@ -2,6 +2,13 @@ from rest_framework import serializers
 from roomerApi import models
 
 
+class InterestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Interest
+        fields = ['interest']
+
+
 class RoomAttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RoomAttribute
@@ -15,6 +22,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    interests = InterestSerializer(many=True)
 
     class Meta:
         model = models.Profile
@@ -35,11 +43,3 @@ class HousingSerializer(serializers.ModelSerializer):
             'month_price', 'host', 'description', 'photo', 'title', 'location',
             'bathrooms_count', 'bedrooms_count', 'housing_type', 'room_attributes', 'sharing_type'
         ]
-
-
-class InterestSerializer(serializers.ModelSerializer):
-    profiles = ProfileSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = models.Interest
-        fields = ['interest', 'profiles']
