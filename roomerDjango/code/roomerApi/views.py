@@ -44,7 +44,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 class InterestsViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Interest.objects.all()
+    queryset = models.Interest.objects.all()[:20]
     serializer_class = serializers.InterestSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
