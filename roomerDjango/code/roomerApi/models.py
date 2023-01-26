@@ -16,7 +16,7 @@ class RoomAttribute(models.Model):
 class Profile(AbstractUser):
     birth_date = models.DateField(auto_now=True)
     sex = models.CharField(choices=utils.sex_field_choices, max_length=1, default='M')
-    avatar = models.ImageField(default='static/img/default.png')
+    avatar = models.ImageField(default='static/img/default.png', upload_to='avatar/%Y/%m/%d/')
     about_me = models.CharField(max_length=1000, default='I\'m good')
     employment = models.CharField(choices=utils.employment_choices, max_length=3, default='E')
     alcohol_attitude = models.CharField(choices=utils.attitude_choices, max_length=1, default='N')
@@ -24,7 +24,7 @@ class Profile(AbstractUser):
     sleep_time = models.CharField(choices=utils.sleep_time_choices, max_length=1, default='N')
     personality_type = models.CharField(choices=utils.personality_choices, max_length=1, default='E')
     clean_habits = models.CharField(choices=utils.clean_choices, max_length=1, default='N')
-    interests = models.ManyToManyField('Interest', related_name='profiles', blank=True)
+    interests = models.ManyToManyField(Interest, blank=True)
 
     objects = managers.ProfileManager()
 

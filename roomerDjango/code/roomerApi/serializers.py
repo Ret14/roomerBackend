@@ -6,7 +6,7 @@ class InterestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Interest
-        fields = ['interest']
+        fields = ['id', 'interest']
 
 
 class RoomAttributeSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    interests = InterestSerializer(many=True)
+    interests = InterestSerializer(many=True, required=False)
 
     class Meta:
         model = models.Profile
@@ -31,7 +31,15 @@ class ProfileSerializer(serializers.ModelSerializer):
             'employment', 'alcohol_attitude', 'smoking_attitude', 'sleep_time',
             'personality_type', 'clean_habits', 'interests'
         ]
-        extra_kwargs = {'interests': {'required': False}}
+
+    def update(self, instance, validated_data):
+        if 'interests' in validated_data:
+            interests = validated_data.pop('interests')
+            for interest in interests:
+                interest_obj = models.Interest.objects.get(interest=interest['interest'])
+                instance.interests.add(interest_obj)
+
+        return super().update(instance, validated_data)
 
 
 class HousingSerializer(serializers.ModelSerializer):
