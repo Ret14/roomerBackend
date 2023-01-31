@@ -41,6 +41,18 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
+    def validate_first_name(self, value):
+        if not value:
+            raise serializers.ValidationError('This field can not be empty')
+
+    def validate_last_name(self, value):
+        if not value:
+            raise serializers.ValidationError('This field can not be empty')
+
+    def validate_about_me(self, value):
+        if not value:
+            raise serializers.ValidationError('This field can not be empty')
+
 
 class HousingSerializer(serializers.ModelSerializer):
     host = ProfileSerializer()
