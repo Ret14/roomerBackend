@@ -9,6 +9,13 @@ class InterestSerializer(serializers.ModelSerializer):
         fields = ['id', 'interest']
 
 
+class HousingPhotoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.HousingPhoto
+        fields = ['photo']
+
+
 class RoomAttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RoomAttribute
@@ -43,11 +50,29 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class HousingSerializer(serializers.ModelSerializer):
-    host = ProfileSerializer()
+    # file_content = serializers.ListField(
+    #     child=serializers.FileField(
+    #         max_length=100000,
+    #         allow_empty_file=False,
+    #         use_url=False,
+    #         required=False
+    #     )
+    # )
+    file_content = HousingPhotoSerializer(required=False, many=True)
 
     class Meta:
         model = models.Housing
         fields = [
-            'month_price', 'host', 'description', 'photo', 'title', 'location',
+            'id', 'month_price', 'host', 'description', 'file_content', 'title', 'location',
             'bathrooms_count', 'bedrooms_count', 'housing_type', 'room_attributes', 'sharing_type'
         ]
+
+    # def create(self, validated_data):
+    #     if 'photos' in validated_data:
+    #         photos = validated_data.getlist('photos')
+    #         validated_data.pop('photos')
+    #         for photo in photos:
+    #             models.HousingPhoto.objects.create(housing_id=validated_data['id'], photo=photo)
+    #     return super().create(validated_data)
+
+

@@ -1,4 +1,5 @@
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, status
+from rest_framework.response import Response
 
 from roomerApi import serializers
 from roomerApi import models
@@ -93,8 +94,33 @@ class HousingViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        files = request.FILES.getlist('file_content')
+        if files:
+            request.data.pop('file_content')
+            serializer = serializers.HousingSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                housing_record = models.Housing.objects.get(id=serializer.data['id'])
+                uploaded_files = []
+                for file in files:
+                    content = models.HousingPhoto.objects.create(photo=file)
+                    uploaded_files.append(content)
+                housing_record.file_content.add(*uploaded_files)
+                context = serializer.data
+                context["file_content"] = [file.id for file in uploaded_files]
+                return Response(context, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer = serializers.HousingSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                context = serializer.data
+                return Response(context, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     serializer_class = serializers.HousingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

@@ -29,17 +29,21 @@ class Profile(AbstractUser):
     objects = managers.ProfileManager()
 
 
+class HousingPhoto(models.Model):
+    photo = models.FileField(upload_to='housing/%Y/%m/%d/')
+
+
 class Housing(models.Model):
     title = models.CharField(max_length=150)
     month_price = models.IntegerField()
     host = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    file_content = models.ManyToManyField(HousingPhoto, related_name='file_content', blank=True)
     description = models.CharField(max_length=1000)
     bedrooms_count = models.IntegerField(choices=utils.amount_score_choices)
     bathrooms_count = models.IntegerField(choices=utils.amount_score_choices)
     housing_type = models.CharField(choices=utils.housing_type_choices, max_length=5)
-    room_attributes = models.ManyToManyField(RoomAttribute)
+    room_attributes = models.ManyToManyField(RoomAttribute, blank=True)
     sharing_type = models.CharField(choices=utils.sharing_type_choices, max_length=1)
-    photo = models.ImageField(default='static/img/flat_default.jpeg')
     location = models.CharField(max_length=200)
 
 
