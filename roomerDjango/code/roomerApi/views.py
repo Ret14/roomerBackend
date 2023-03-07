@@ -1,5 +1,6 @@
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
+from django.shortcuts import render
 
 from roomerApi import serializers
 from roomerApi import models
@@ -128,3 +129,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+def lobby(request):
+    return render(request, 'lobby.html')
