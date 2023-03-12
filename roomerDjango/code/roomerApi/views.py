@@ -47,14 +47,14 @@ class InterestsViewSet(viewsets.ModelViewSet):
 
     queryset = models.Interest.objects.all()[:20]
     serializer_class = serializers.InterestSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
 
 class RoomAttributeViewSet(viewsets.ModelViewSet):
 
     queryset = models.RoomAttribute.objects.all()
     serializer_class = serializers.RoomAttributeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
 
 class HousingViewSet(viewsets.ModelViewSet):
@@ -127,4 +127,4 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
