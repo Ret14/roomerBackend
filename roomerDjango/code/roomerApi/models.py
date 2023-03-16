@@ -56,3 +56,12 @@ class Review(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_set')
     comment = models.CharField(max_length=1000)
     date_time = models.DateTimeField(auto_now=True)
+
+
+class Message(models.Model):
+    date = models.DateField()
+    text = models.CharField(max_length=512)
+    donor = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    isChecked = models.IntegerField()
+
