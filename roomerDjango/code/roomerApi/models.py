@@ -61,7 +61,7 @@ class Review(models.Model):
 class Message(models.Model):
     date = models.DateField()
     text = models.CharField(max_length=512)
-    donor = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor_set')
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='recipient_set')
     isChecked = models.IntegerField()
 
