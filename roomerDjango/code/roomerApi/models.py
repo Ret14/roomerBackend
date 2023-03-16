@@ -59,9 +59,9 @@ class Review(models.Model):
 
 
 class Message(models.Model):
-    date = models.DateField()
+    date = models.DateField(default='2022-01-30')
     text = models.CharField(max_length=512)
     donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor_set')
     recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='recipient_set')
-    isChecked = models.IntegerField()
+
 
