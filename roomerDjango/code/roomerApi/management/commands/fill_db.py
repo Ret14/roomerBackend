@@ -73,7 +73,25 @@ class Command(BaseCommand):
             for _ in range(amount)]
 
         models.Profile.objects.bulk_create(profiles)
-
+        password = 'x2Q6$mUcn3'
+        names = ('max', 'rodion', 'nika', 'andrew')
+        for name in names:
+            for i in range(3):
+                models.Profile.objects.create_user(
+                    email=self.fake.email(),
+                    username=f'{name}_user_{i}',
+                    password=password,
+                    first_name=self.fake.first_name(),
+                    last_name=self.fake.last_name(),
+                    sex=random.choice(sex_field_choices),
+                    about_me=self.fake.text(max_nb_chars=random.randint(400, 1000)),
+                    employment=random.choice(employment_choices),
+                    alcohol_attitude=random.choice(attitude_choices),
+                    smoking_attitude=random.choice(attitude_choices),
+                    sleep_time=random.choice(sleep_time_choices),
+                    personality_type=random.choice(personality_choices),
+                    clean_habits=random.choice(clean_choices),
+                )
         interests_ids = list(models.Interest.objects.values_list('id', flat=True))
         profile_ids = list(models.Profile.objects.values_list('id', flat=True))
 

@@ -1,20 +1,23 @@
 ## Roomer Backend
-| Версия 	|    Дата    	|                                                                                          Описание изменений                                                                                          	|
-|:------:	|:----------:	|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:	|
-| 1.0    	| 24.12.2022 	| Описал запросы и ответы для фильтрации пользователей и квартир                                                                                                                                       	|
-| 1.1    	| 12.03.2023 	| Добавил запросы первичной регистрации, авторизации, заполнения профиля,  получения информации об авторизованном пользователе, запрос добавления объявления. Привел описание запросов к единому стилю 	|                                                            
+| Версия 	 |  Дата    	   |                                             Описание изменений                                                                                          	                                              |
+|:--------:|:------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| 1.0    	 | 24.12.2022 	 | Описал запросы и ответы для фильтрации пользователей и квартир                                                                                                                                       	 |
+| 1.1    	 | 12.03.2023 	 | Добавил запросы первичной регистрации, авторизации, заполнения профиля,  получения информации об авторизованном пользователе, запрос добавления объявления. Привел описание запросов к единому стилю 	 |                                                            
+| 1.2    	 | 17.03.2023 	 |                                                                 Добавил аккаунты для членов команды, исправил синтаксис запросов curl                                                                  |                                                            
+
+[Аккаунты для тестирования](accounts.md)
 
 ### Первичная регистрация пользователя
 #### Бизнес постановка
 Пользователь отправляет username login email для регистрации и получает успешный код ответа либо сообщения о возникших ошибках
 #### Примеры запросов
 #### Запрос:
-    curl -X POST
-      http://176.113.83.93:8000/auth/users/
-    -d '{
-    "email": "somemail@mail.ru",
-    "password": "very_hard_password",
-    "username": "cool_username"
+    curl -X POST\
+      http://176.113.83.93:8000/auth/users/\
+    -d '{\
+    "email": "somemail@mail.ru",\
+    "password": "very_hard_password",\
+    "username": "cool_username"\
     }'
 #### Ответ:
     Response code: 201
@@ -25,12 +28,12 @@
         "id": 301
     }
 #### Запрос:
-    curl -X POST
-    http://176.113.83.93:8000/auth/users/
-    -d '{
-    "email": "somemail@mail.ru",
-    "password": "short",
-    "username": "cool_username"
+    curl -X POST\
+    http://176.113.83.93:8000/auth/users/\
+    -d '{\
+    "email": "somemail@mail.ru",\
+    "password": "short",\
+    "username": "cool_username"\
     }'
 #### Ответ:
     Response code: 400
@@ -47,11 +50,11 @@
 
 #### Примеры запросов
 #### Запрос:
-    curl -X POST
-      http://176.113.83.93:8000/auth/token/login/
-    -d '{
-    "password": "very_hard_password",
-    "username": "cool_username"
+    curl -X POST\
+      http://176.113.83.93:8000/auth/token/login/\
+    -d '{\
+    "password": "very_hard_password",\
+    "username": "cool_username"\
     }'
 #### Ответ:
     Response code: 200
@@ -60,11 +63,11 @@
         "auth_token": "e464ae9def145a8774ee5d9215a58237c1fd7e2a"
     }
 #### Запрос:
-    curl -X POST
-      http://176.113.83.93/auth/token/login/
-    -d '{
-    "password": "wrong_password",
-    "username": "cool_username"
+    curl -X POST\
+      http://176.113.83.93/auth/token/login/\
+    -d '{\
+    "password": "wrong_password",\
+    "username": "cool_username"\
     }'
 #### Ответ:
     Response code: 400
@@ -78,9 +81,9 @@
 #### Бизнес постановка:
 Пользователь повторно авторизовался и решил посмотреть информацию своего профиля
 #### Запрос:
-    curl -X GET
-    http://176.113.83.93:8000/auth/users/me/ 
-    -H 'Authorization: Token c0d68713b6753ea14ac12f9b6ca96df6f4b51457'
+    curl -X GET\
+    http://176.113.83.93:8000/auth/users/me/ \
+    -H 'Authorization: Token c0d68713b6753ea14ac12f9b6ca96df6f4b51457'\
 
 #### Ответ:
     Response code: 200
@@ -143,20 +146,20 @@
 ]
 #### Примеры запросов
 #### Запрос:
-    curl -X PUT
-    http://176.113.83.93:8000/auth/users/me/
-    -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
-    -F first_name=rodion
-    -F last_name=ivannikov
-    -F birth_date=2022-01-30
-    -F sex=F 
-    -F avatar=@/home/rodion/Downloads/8405385.jpg
-    -F about_me='some person description'
-    -F employment=E
-    -F alcohol_attitude=I
-    -F smoking_attitude=I
-    -F sleep_time=N
-    -F personality_type=I 
+    curl -X PUT\
+    http://176.113.83.93:8000/auth/users/me/\
+    -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'\
+    -F first_name=rodion\
+    -F last_name=ivannikov\
+    -F birth_date=2022-01-30\
+    -F sex=F \
+    -F avatar=@/home/rodion/Downloads/8405385.jpg\
+    -F about_me='some person description'\
+    -F employment=E\
+    -F alcohol_attitude=I\
+    -F smoking_attitude=I\
+    -F sleep_time=N\
+    -F personality_type=I \
     -F clean_habits=N
 #### Ответ:
     Response code: 200
@@ -185,7 +188,7 @@
 Значения для фильтрации - это варианты заполнения полей из задачи сверху
 #### Примеры запросов
 #### Запрос:
-    curl -X GET  
+    curl -X GET\
     http://176.113.83.93/profile/\
     ?sex=F&\
     employment=E&\
@@ -245,7 +248,7 @@
 
 #### Примеры запросов
 #### Запрос:
-    curl -X GET  
+    curl -X GET\
     http://176.113.83.93/housing/\
     ?month_price_from=40000&\
     month_price_to=90000&\
@@ -292,16 +295,16 @@
 Пользователь решил опубликовать объявление о совместной аренде квартиры. Пользователь указывает необходимую информацию, загружает фото помещения и публикует объявление
 #### Примеры запросов
 #### Запрос:
-    curl -X POST
-        http://176.113.83.93:8000/housing/
-        -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
-        -F location='Astrakhan city'
-        -F sharing_type=S
-        -F host=300
-        -F housing_type=F
-        -F file_content=@/home/rodion/Downloads/8405385.jpg
-        -F file_content=@/home/rodion/Downloads/7474638.jpg
-        -F bedrooms_count=5
+    curl -X POST\
+        http://176.113.83.93:8000/housing/\
+        -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'\
+        -F location='Astrakhan city'\
+        -F sharing_type=S\
+        -F host=300\
+        -F housing_type=F\
+        -F file_content=@/home/rodion/Downloads/8405385.jpg\
+        -F file_content=@/home/rodion/Downloads/7474638.jpg\
+        -F bedrooms_count=5\
         -F bathrooms_count=2
 #### Ответ:
     {
