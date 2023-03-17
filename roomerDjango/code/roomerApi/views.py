@@ -1,6 +1,5 @@
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
-from django.shortcuts import render
 
 from roomerApi import serializers
 from roomerApi import models
@@ -48,14 +47,14 @@ class InterestsViewSet(viewsets.ModelViewSet):
 
     queryset = models.Interest.objects.all()[:20]
     serializer_class = serializers.InterestSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
 
 class RoomAttributeViewSet(viewsets.ModelViewSet):
 
     queryset = models.RoomAttribute.objects.all()
     serializer_class = serializers.RoomAttributeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
 
 class HousingViewSet(viewsets.ModelViewSet):
@@ -128,8 +127,4 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-def lobby(request):
-    return render(request, 'lobby.html')
+    permission_classes = [permissions.AllowAny]
