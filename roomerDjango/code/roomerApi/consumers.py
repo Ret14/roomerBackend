@@ -6,7 +6,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
-        self.send(text_data=json.dumps({
+        await self.send(text_data=json.dumps({
             'type': 'connection_established',
             'message': 'You are now connected'
         }))
@@ -17,9 +17,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data
-        print(message)
 
-        self.send(text_data=json.dumps({
+        await self.send(text_data=json.dumps({
             'type': 'received_message',
             'message': message,
         }))
