@@ -73,11 +73,15 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = 'roomerBackend.asgi.application'
+
+CHANNELS_REDIS_HOST = env.str('CHANNELS_REDIS_HOST', 'localhost')
+CHANNELS_REDIS_PORT = env.int('CHANNELS_REDIS_PORT', 6379)
+
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("0.0.0.0", 6379)],
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [f"redis://{CHANNELS_REDIS_HOST}:{CHANNELS_REDIS_PORT}/3"],
         },
     },
 }
