@@ -30,7 +30,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
-    path('lobby/', views.lobby),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
 if settings.DEBUG:
