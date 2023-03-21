@@ -59,9 +59,11 @@ class Review(models.Model):
 
 
 class Message(models.Model):
+    class Meta:
+        unique_together = ("donor", "recipient")
+
     date = models.DateField(default='2022-01-30')
     text = models.CharField(max_length=512)
-    donor = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    isChecked = models.IntegerField()
+    donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor')
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='recipient')
 
