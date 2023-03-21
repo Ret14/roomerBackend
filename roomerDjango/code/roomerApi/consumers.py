@@ -3,6 +3,8 @@ import uuid
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
+clients = {}
+chats = []
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
