@@ -7,7 +7,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.donor_id = self.scope["url_route"]["kwargs"]["donor_id"]
         self.recipient_id = self.scope["url_route"]["kwargs"]["recipient_id"]
-        self.room_group_name = "chat_%d_%d" % self.donor_id % self.recipient_id
+        self.room_group_name = "chat_%d_%d" % (self.donor_id, self.recipient_id)
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
