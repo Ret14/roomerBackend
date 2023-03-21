@@ -1,7 +1,6 @@
 import json
 import uuid
 
-import scope as scope
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 
