@@ -10,3 +10,4 @@ class Command(BaseCommand):
         models.Review.objects.all().delete()
         models.Housing.objects.all().delete()
         models.RoomAttribute.objects.all().delete()
+        models.Message.objects.all().delete()
