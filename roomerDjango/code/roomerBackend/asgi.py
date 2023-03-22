@@ -14,7 +14,7 @@ from django.core.asgi import get_asgi_application
 from roomerApi import routing
 
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'roomerBackend.settings'
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'roomerBackend.settings')
 
 asgi = get_asgi_application()
 

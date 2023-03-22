@@ -1,7 +1,6 @@
 import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
-from roomerApi import models
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
