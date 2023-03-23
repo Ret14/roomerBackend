@@ -30,7 +30,6 @@ ALLOWED_HOSTS = ['176.113.83.93', '0.0.0.0']
 
 INSTALLED_APPS = [
     'channels',
-    'roomerApi',
     'djoser',
     'rest_framework.authtoken',
     'rest_framework',
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'roomerApi',
 ]
 
 MIDDLEWARE = [
