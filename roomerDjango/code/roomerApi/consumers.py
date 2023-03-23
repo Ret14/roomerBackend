@@ -13,7 +13,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         list_of_messages = list(Message.objects.filter(chat_id=self.donor_id+self.recipient_id).all())
         messages_json = [message.as_json() for message in list_of_messages]
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "chat_message", "messages": messages_json}
+            self.room_group_name, {"type": "chat_message", "messages": "Hello"}
         )
 
     async def disconnect(self, close_code):
