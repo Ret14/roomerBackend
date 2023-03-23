@@ -19,10 +19,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         donor_id = text_data_json["donor_id"]
         recipient_id = text_data_json["recipient_id"]
         from roomerApi.models import Profile
-        from roomerApi.models import Message
+        from roomerApi.models import TextMessagee
         donor_profile = Profile.objects.get_queryset().filter(id=donor_id).first()
         recipient_profile = Profile.objects.get_queryset().filter(id=recipient_id).first()
-        message = Message.objects.create(donor=donor_profile, recipient=recipient_profile, text=message)
+        message = TextMessagee.objects.create(donor=donor_profile, recipient=recipient_profile, text=message)
         message.save()
 
         await self.channel_layer.group_send(

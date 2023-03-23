@@ -60,7 +60,7 @@ class Review(models.Model):
     date_time = models.DateTimeField(auto_now=True)
 
 
-class Message(models.Model):
+class TextMessagee(models.Model):
     date_time = models.DateTimeField(auto_now=True)
     text = models.CharField(max_length=512)
     donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor')
