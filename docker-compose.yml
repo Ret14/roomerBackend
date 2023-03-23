@@ -5,7 +5,7 @@ services:
   roomer_api:
     container_name: roomer_api
     build: ./roomerDjango
-    command: bash -c "python manage.py migrate zero && python3.8 manage.py makemigrations roomerApi && python3.8 manage.py migrate && python3.8 manage.py fill_db 300 && daphne -b 0.0.0.0 -p 8080 roomerBackend.asgi:application && python3 manage.py runworker channels --settings=roomerBackend.settings -v2"
+    command: bash -c "python3.8 manage.py makemigrations roomerApi --initial && python3.8 manage.py migrate && python3.8 manage.py fill_db 300 && daphne -b 0.0.0.0 -p 8080 roomerBackend.asgi:application && python3 manage.py runworker channels --settings=roomerBackend.settings -v2"
     ports:
       - "8000:8080"
     depends_on:
