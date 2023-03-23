@@ -61,6 +61,7 @@ class Review(models.Model):
 
 
 class Message(models.Model):
+    chat_id = models.IntegerField()
     date_time = models.DateTimeField(auto_now=True)
     text = models.CharField(max_length=512)
     donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor')

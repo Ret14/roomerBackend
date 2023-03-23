@@ -62,4 +62,4 @@ class HousingSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Message
-        fields = ['id', 'date_time', 'text', 'isChecked']
+        fields = ['id', 'date_time', 'text', 'donor', 'recipient', 'isChecked']

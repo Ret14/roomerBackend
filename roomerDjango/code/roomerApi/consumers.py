@@ -4,25 +4,31 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        from roomerApi.models import Message
         self.donor_id = self.scope["url_route"]["kwargs"]["donor_id"]
         self.recipient_id = self.scope["url_route"]["kwargs"]["recipient_id"]
         self.room_group_name = "chat_%d" % (self.donor_id + self.recipient_id)
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
+        list_of_messages = list(Message.objects.filter(chat_id=self.donor_id+self.recipient_id).all())
+        messages_json = [message.as_json() for message in list_of_messages]
+        await self.channel_layer.group_send(
+            self.room_group_name, {"type": "chat_message", "messages": messages_json}
+        )
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
+        from roomerApi.models import Profile
+        from roomerApi.models import Message
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         donor_id = text_data_json["donor_id"]
         recipient_id = text_data_json["recipient_id"]
-        from roomerApi.models import Profile
-        from roomerApi.models import Message
         donor_profile = Profile.objects.get_queryset().filter(id=donor_id).first()
         recipient_profile = Profile.objects.get_queryset().filter(id=recipient_id).first()
-        message = Message.objects.create(donor=donor_profile, recipient=recipient_profile, text=message)
+        message = Message.objects.create(chat_id=donor_id+recipient_id,donor=donor_profile, recipient=recipient_profile, text=message)
         message.save()
 
         await self.channel_layer.group_send(
