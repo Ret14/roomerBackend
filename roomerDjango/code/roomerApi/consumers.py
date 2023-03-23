@@ -22,7 +22,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         from roomerApi.models import Message
         donor_profile = Profile.objects.get_queryset().filter(id=donor_id).first()
         recipient_profile = Profile.objects.get_queryset().filter(id=recipient_id).first()
-        Message.objects.create(donor=donor_profile, recipient=recipient_profile, text=message)
+        Message.objects.save(donor=donor_profile, recipient=recipient_profile, text=message)
 
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat_message", "message": text_data_json}
