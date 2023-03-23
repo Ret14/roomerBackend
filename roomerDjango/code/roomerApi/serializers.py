@@ -59,3 +59,9 @@ class HousingSerializer(serializers.ModelSerializer):
             'id', 'month_price', 'host', 'description', 'file_content', 'title', 'location',
             'bathrooms_count', 'bedrooms_count', 'housing_type', 'room_attributes', 'sharing_type'
         ]
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Message
+        fields = ['date_time', 'text', 'donor', 'recipient', 'isChecked']
