@@ -134,7 +134,7 @@ class ChatsViewSet(viewsets.ModelViewSet):
         chat_id = self.request.query_params.get('chat_id')
         if user_id is not None:
             if chat_id != "":
-                queryset = queryset.filter(donor_id=user_id)
+                queryset = queryset.filter(chat_id=chat_id)
             else:
                 queryset = queryset.filter(donor_id=user_id).order_by("chat_id").distinct("chat_id")
         return queryset
