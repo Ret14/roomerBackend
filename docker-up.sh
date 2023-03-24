@@ -1,3 +1,3 @@
 #!/bin/bash
-
-docker compose up --abort-on-container-exit --build
+sh ./docker-down.sh ;
+docker compose up --build --detach
