@@ -133,7 +133,7 @@ class ChatsViewSet(viewsets.ModelViewSet):
         user_id = self.request.query_params.get('user_id')
         if user_id is not None:
             queryset = queryset.filter(donor_id=user_id)
-            queryset = queryset.distinct("chat_id")
+            queryset = queryset.values_list('chat_id', flat=True).distinct()
         return queryset
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]
