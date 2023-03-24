@@ -27,7 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         recipient_profile = Profile.objects.get_queryset().filter(id=recipient_id).first()
         message_model = Message.objects.create(chat_id=donor_id + recipient_id, donor=donor_profile,
                                                recipient=recipient_profile, text=message,
-                                               datetime=datetime.datetime.now())
+                                               date_time=datetime.datetime.now())
         message_model.save()
         dict_obj = model_to_dict(message_model)
         serialized = json.dumps(dict_obj)
