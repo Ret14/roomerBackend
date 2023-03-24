@@ -44,21 +44,18 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 
 class InterestsViewSet(viewsets.ModelViewSet):
-
     queryset = models.Interest.objects.all()[:20]
     serializer_class = serializers.InterestSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class RoomAttributeViewSet(viewsets.ModelViewSet):
-
     queryset = models.RoomAttribute.objects.all()
     serializer_class = serializers.RoomAttributeSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class HousingViewSet(viewsets.ModelViewSet):
-
     queryset = models.Housing.objects.all()
 
     def filter_queryset(self, queryset):
@@ -124,7 +121,23 @@ class HousingViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-
     queryset = models.Review.objects.all()
     serializer_class = serializers.ReviewSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class ChatsViewSet(viewsets.ModelViewSet):
+    queryset = models.Message.objects.all()
+
+    def filter_queryset(self, queryset):
+        user_id = self.request.query_params.get('user_id')
+        chat_id = self.request.query_params.get('chat_id')
+        if user_id is not None:
+            if chat_id != "":
+                queryset = queryset.filter(chat_id=chat_id)
+            else:
+                queryset = queryset.filter(donor_id=user_id).order_by("chat_id").distinct("chat_id")
+        return queryset
+
+    serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]

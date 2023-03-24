@@ -1,3 +1,4 @@
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -14,6 +15,7 @@ class RoomAttribute(models.Model):
 
 
 class Profile(AbstractUser):
+
     birth_date = models.DateField(default='2022-01-30')
     sex = models.CharField(choices=utils.sex_field_choices, max_length=1, default='M')
     avatar = models.ImageField(default='static/img/default.png', upload_to='avatar/%Y/%m/%d/')
@@ -56,3 +58,12 @@ class Review(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_set')
     comment = models.CharField(max_length=1000)
     date_time = models.DateTimeField(auto_now=True)
+
+
+class Message(models.Model):
+    chat_id = models.IntegerField()
+    date_time = models.DateTimeField(auto_now=True)
+    text = models.CharField(max_length=512)
+    donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor')
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='recipient')
+    isChecked = models.BooleanField(default=False)

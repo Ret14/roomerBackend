@@ -28,7 +28,7 @@ class Command(BaseCommand):
             self.create_profiles(ratio)
             self.create_housings(ratio)
         except Exception:
-            models.Profile.objects.all().delete()
+            # models.Profile.objects.all().delete()
             models.Interest.objects.all().delete()
             # models.Review.objects.all().delete()
             models.Housing.objects.all().delete()

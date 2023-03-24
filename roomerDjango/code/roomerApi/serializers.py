@@ -3,14 +3,12 @@ from roomerApi import models
 
 
 class InterestSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.Interest
         fields = ['id', 'interest']
 
 
 class HousingPhotoSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.HousingPhoto
         fields = ['photo']
@@ -59,3 +57,12 @@ class HousingSerializer(serializers.ModelSerializer):
             'id', 'month_price', 'host', 'description', 'file_content', 'title', 'location',
             'bathrooms_count', 'bedrooms_count', 'housing_type', 'room_attributes', 'sharing_type'
         ]
+
+
+class ChatsSerializer(serializers.ModelSerializer):
+    donor = ProfileSerializer()
+    recipient = ProfileSerializer()
+
+    class Meta:
+        model = models.Message
+        fields = ['id', 'chat_id', 'date_time', 'text', 'donor', 'recipient', 'isChecked']
