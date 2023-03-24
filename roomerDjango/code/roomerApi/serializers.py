@@ -59,7 +59,7 @@ class HousingSerializer(serializers.ModelSerializer):
         ]
 
 
-class MessageSerializer(serializers.ModelSerializer):
+class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Message
-        fields = ['id', 'date_time', 'text', 'donor', 'recipient', 'isChecked']
+        fields = ['id', 'chat_id', 'date_time', 'text', 'donor', 'recipient', 'isChecked']
