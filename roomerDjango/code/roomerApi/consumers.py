@@ -1,5 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.core.serializers import serialize
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -10,10 +11,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = "chat_%d" % (self.donor_id + self.recipient_id)
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
-        list_of_messages = list(Message.objects.filter(chat_id=self.donor_id+self.recipient_id).all())
-        messages_json = [message.as_json() for message in list_of_messages]
+        messages = Message.objects.filter(chat_id=self.donor_id+self.recipient_id).all()
+        serialized_data = serialize("json", messages)
+        serialized_data = json.loads(serialized_data)
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "chat_message", "messages": "Hello"}
+            self.room_group_name, {"type": "chat_message", "messages": serialized_data}
         )
 
     async def disconnect(self, close_code):
