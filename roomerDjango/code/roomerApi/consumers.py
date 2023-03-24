@@ -1,3 +1,4 @@
+import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.core.serializers import serialize
@@ -25,7 +26,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         donor_profile = Profile.objects.get_queryset().filter(id=donor_id).first()
         recipient_profile = Profile.objects.get_queryset().filter(id=recipient_id).first()
         message_model = Message.objects.create(chat_id=donor_id + recipient_id, donor=donor_profile,
-                                               recipient=recipient_profile, text=message)
+                                               recipient=recipient_profile, text=message,
+                                               datetime=datetime.datetime.now())
         message_model.save()
         dict_obj = model_to_dict(message_model)
         serialized = json.dumps(dict_obj)
