@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from roomerApi import serializers
 from roomerApi import models
-
+from django.db.models import Q
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = models.Profile.objects.all()
@@ -136,7 +136,7 @@ class ChatsViewSet(viewsets.ModelViewSet):
             if chat_id != "":
                 queryset = queryset.filter(chat_id=chat_id)
             else:
-                queryset = queryset.filter(donor_id=user_id).order_by("chat_id").distinct("chat_id")
+                queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct("chat_id")
         return queryset
 
     serializer_class = serializers.ChatsSerializer
