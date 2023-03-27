@@ -5,6 +5,7 @@
 | 1.1    	 | 12.03.2023 	 | Добавил запросы первичной регистрации, авторизации, заполнения профиля,  получения информации об авторизованном пользователе, запрос добавления объявления. Привел описание запросов к единому стилю 	 |                                                            
 | 1.2    	 | 17.03.2023 	 |                                                                 Добавил аккаунты для членов команды, исправил синтаксис запросов curl                                                                  |                                                            
 | 1.3    	 | 18.03.2023 	 |                                                                                     Исправил синтаксис команд curl                                                                                     |                                                            
+| 1.4    	 | 27.03.2023 	 |                                                                  Добавил параметры age_to, age_from в запрос фильтрации пользователей                                                                  |                                                            
 
 [Аккаунты для тестирования](accounts.md)
 
@@ -175,7 +176,7 @@
 #### Примеры запросов
 #### Запрос:
     curl -X GET \
-    http://176.113.83.93/profile/?sex=F&employment=E&alcohol_attitude=N&smoking_attitude=I&sleep_time=N&personality_type=E&clean_habits=N
+    http://176.113.83.93/profile/?sex=F&employment=E&alcohol_attitude=N&smoking_attitude=I&sleep_time=N&personality_type=E&clean_habits=N&age_from=18&age_to=28
 #### Ответ:
     Response code: 200
     Response body:

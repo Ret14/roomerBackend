@@ -1,14 +1,35 @@
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
-
+from rest_framework.viewsets import ModelViewSet
+import datetime
 from roomerApi import serializers
 from roomerApi import models
 
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(ModelViewSet):
     queryset = models.Profile.objects.all()
 
+    @staticmethod
+    def get_birth_date_from_age(age: int):
+        today_date = datetime.date.today()
+        today_year = today_date.year
+        target_year = today_year - age
+        return datetime.date(target_year, today_date.month, today_date.day)
+
     def filter_queryset(self, queryset):
+        params = self.request.query_params
+        if 'age_from' in params:
+            queryset = queryset.filter(birth_date__range=(
+                datetime.date(1970, 1, 1),
+                self.get_birth_date_from_age(int(params['age_from']))
+            ))
+
+        if 'age_to' in params:
+            queryset = queryset.filter(birth_date__range=(
+                self.get_birth_date_from_age(int(params['age_to'])),
+                datetime.date.today()
+            ))
+
         sex = self.request.query_params.get('sex')
         if sex is not None:
             queryset = queryset.filter(sex=sex)
@@ -70,14 +91,14 @@ class HousingViewSet(viewsets.ModelViewSet):
         bathrooms_count = self.request.query_params.get('bathrooms_count')
         if bathrooms_count is not None:
             if bathrooms_count == '>3':
-                queryset = queryset.filter(bathrooms_count__gte=3)
+                queryset = queryset.filter(bathrooms_count__gt=3)
             else:
                 queryset = queryset.filter(bathrooms_count=bathrooms_count)
 
         bedrooms_count = self.request.query_params.get('bedrooms_count')
         if bedrooms_count is not None:
             if bedrooms_count == '>3':
-                queryset = queryset.filter(bedrooms_count__gte=3)
+                queryset = queryset.filter(bedrooms_count__gt=3)
             else:
                 queryset = queryset.filter(bedrooms_count=bedrooms_count)
 

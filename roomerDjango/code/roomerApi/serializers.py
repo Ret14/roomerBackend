@@ -38,10 +38,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        print(validated_data)
-        if 'user_data' in validated_data:
-            user_data = validated_data.pop('user_data')
-            validated_data.update(user_data)
         if 'interests' in validated_data:
             interests = validated_data.pop('interests')
             for interest in interests:

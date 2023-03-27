@@ -69,6 +69,7 @@ class Command(BaseCommand):
                            sleep_time=random.choice(sleep_time_choices),
                            personality_type=random.choice(personality_choices),
                            clean_habits=random.choice(clean_choices),
+                           birth_date=self.fake.date_between()
                            )
             for _ in range(amount)]
 
