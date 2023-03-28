@@ -6,6 +6,7 @@
 | 1.2    	 | 17.03.2023 	 |                                                                 Добавил аккаунты для членов команды, исправил синтаксис запросов curl                                                                  |                                                            
 | 1.3    	 | 18.03.2023 	 |                                                                                     Исправил синтаксис команд curl                                                                                     |                                                            
 | 1.4    	 | 27.03.2023 	 |                                                                  Добавил параметры age_to, age_from в запрос фильтрации пользователей                                                                  |                                                            
+| 1.5    	 | 28.03.2023 	 |                                    Добавил параметр interests в запрос фильтрации пользователей. Вставил комментарий, описывающий алгоритм фильтрации и ограничения                                    |                                                            
 
 [Аккаунты для тестирования](accounts.md)
 
@@ -176,17 +177,20 @@
 #### Примеры запросов
 #### Запрос:
     curl -X GET \
-    http://176.113.83.93/profile/?sex=F&employment=E&alcohol_attitude=N&smoking_attitude=I&sleep_time=N&personality_type=E&clean_habits=N&age_from=18&age_to=28
+    http://176.113.83.93/profile/?sex=M&employment=E&alcohol_attitude=N&smoking_attitude=I&sleep_time=O&personality_type=E&clean_habits=N&age_from=18&age_to=28&interests=2&interests=3&interests=1&interests=6
 #### Ответ:
     Response code: 200
     Response body:
-    [{
-        "first_name": "Patricia",
-        "last_name": "Scott",
-        "birth_date": "2022-12-21",
-        "sex": "F",
-        "avatar": "http://176.113.83.93:8000/static/img/default.png",
-        "about_me": "Couple bag thank. Could cut pull save fine",
+    [
+    {
+        "id": 91,
+        "first_name": "Michelle",
+        "last_name": "Martinez",
+        "birth_date": "1996-10-11",
+        "sex": "M",
+        "avatar": "http://0.0.0.0:8000/media/static/img/default.jpg",
+        "email": "martinaaron@example.com",
+        "about_me": "Time arm from force analysis. Wind thank impact miss into.\nTree page across once station. Meeting themselves piece relationship. Protect put carry.\nFar take hold his us. Take inside research her attack yet.\nPerform listen size resource. Investment remember may knowledge. Health chair morning hold listen his media.\nInternational table make. Opportunity against dog start vote simply.\nTravel nature drop sport really hair. Plant them wish learn edge body. Institution often they stop beyond former ground. Those own forward break.",
         "employment": "E",
         "alcohol_attitude": "N",
         "smoking_attitude": "I",
@@ -194,17 +198,39 @@
         "personality_type": "E",
         "clean_habits": "N",
         "interests": [
-            77,
-            80,
-            82,
-            84,
-            85,
-            86,
-            88,
-            89,
-            90
+            {
+                "id": 3,
+                "interest": "son"
+            },
+            {
+                "id": 6,
+                "interest": "amount"
+            },
+            {
+                "id": 8,
+                "interest": "much"
+            },
+            {
+                "id": 10,
+                "interest": "interview"
+            },
+            {
+                "id": 18,
+                "interest": "wait"
+            },
+            {
+                "id": 20,
+                "interest": "discover"
+            },
+            {
+                "id": 24,
+                "interest": "challenge"
+            }
         ]
-    },]
+    }
+    ]
+#### Комментарий:
+Как происходит фильтрация по интересам: Считается кол-во переданных id интересов, умножается на 0.4 и округляется в большую сторону до целых. Это количество одинаковых значений в интересах юзера и интересах, переданных в запросе. Если число общих интересов у юзера и в запросе меньше, чем высчитанное число общих интересов, то он исключается из подборки фильтра. Максимум можно передать 30 id интересов
 ### Фильтрация квартир
 #### Бизнес постановка:
 Пользователь задает параметры фильтрации и получает список квартир, которые им удовлетворяют

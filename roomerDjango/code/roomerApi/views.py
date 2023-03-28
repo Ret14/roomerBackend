@@ -6,6 +6,7 @@ from roomerApi import serializers
 from roomerApi import models
 from django.db.models import Q
 
+
 class ProfileViewSet(ModelViewSet):
     queryset = models.Profile.objects.all()
 
@@ -16,8 +17,13 @@ class ProfileViewSet(ModelViewSet):
         target_year = today_year - age
         return datetime.date(target_year, today_date.month, today_date.day)
 
+    @staticmethod
+    def get_common_items_amount(list_a: list, list_b: list):
+        return sum(x == y for x, y in zip(list_a, list_b))
+
     def filter_queryset(self, queryset):
         params = self.request.query_params
+
         if 'age_from' in params:
             queryset = queryset.filter(birth_date__range=(
                 datetime.date(1970, 1, 1),
@@ -30,33 +36,38 @@ class ProfileViewSet(ModelViewSet):
                 datetime.date.today()
             ))
 
-        sex = self.request.query_params.get('sex')
-        if sex is not None:
-            queryset = queryset.filter(sex=sex)
+        if 'sex' in params:
+            queryset = queryset.filter(sex=params['sex'])
 
-        sleep_time = self.request.query_params.get('sleep_time')
-        if sleep_time is not None:
-            queryset = queryset.filter(sleep_time=sleep_time)
+        if 'sleep_time' in params:
+            queryset = queryset.filter(sleep_time=params['sleep_time'])
 
-        personality_type = self.request.query_params.get('personality_type')
-        if personality_type is not None:
-            queryset = queryset.filter(personality_type=personality_type)
+        if 'personality_type' in params:
+            queryset = queryset.filter(personality_type=params['personality_type'])
 
-        employment = self.request.query_params.get('employment')
-        if employment is not None:
-            queryset = queryset.filter(employment=employment)
+        if 'employment' in params:
+            queryset = queryset.filter(employment=params['employment'])
 
-        alcohol_attitude = self.request.query_params.get('alcohol_attitude')
-        if alcohol_attitude is not None:
-            queryset = queryset.filter(alcohol_attitude=alcohol_attitude)
+        if 'alcohol_attitude' in params:
+            queryset = queryset.filter(alcohol_attitude=params['alcohol_attitude'])
 
-        smoking_attitude = self.request.query_params.get('smoking_attitude')
-        if smoking_attitude is not None:
-            queryset = queryset.filter(smoking_attitude=smoking_attitude)
+        if 'smoking_attitude' in params:
+            queryset = queryset.filter(smoking_attitude=params['smoking_attitude'])
 
-        clean_habits = self.request.query_params.get('clean_habits')
-        if clean_habits is not None:
-            queryset = queryset.filter(clean_habits=clean_habits)
+        if 'clean_habits' in params:
+            queryset = queryset.filter(clean_habits=params['clean_habits'])
+
+        if 'interests' in params:
+            interests_ids = list(map(lambda x: int(x), params.getlist('interests')))
+            if len(interests_ids) == 1:
+                matching_interests_amount = 1
+            else:
+                matching_interests_amount = round(len(interests_ids) * 0.4)
+            for query in queryset:
+                query_interests_ids = list(map(lambda x: int(x['id']), query.interests.values('id')))
+                query_match_amount = len(set(query_interests_ids) & set(interests_ids))
+                if query_match_amount < matching_interests_amount:
+                    queryset = queryset.exclude(id=query.id)
 
         return queryset
 
@@ -157,7 +168,8 @@ class ChatsViewSet(viewsets.ModelViewSet):
             if chat_id != "":
                 queryset = queryset.filter(chat_id=chat_id)
             else:
-                queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct("chat_id")
+                queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct(
+                    "chat_id")
         return queryset
 
     serializer_class = serializers.ChatsSerializer
