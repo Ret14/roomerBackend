@@ -17,7 +17,7 @@ class Profile(AbstractUser):
 
     birth_date = models.DateField(default='2022-01-30')
     sex = models.CharField(choices=utils.sex_field_choices, max_length=1, default='M')
-    avatar = models.ImageField(default='static/img/default.jpg', upload_to='avatar/%Y/%m/%d/')
+    avatar = models.ImageField(default='avatar/default.jpg', upload_to='avatar/%Y/%m/%d/')
     about_me = models.CharField(max_length=1000, default='I\'m good')
     employment = models.CharField(choices=utils.employment_choices, max_length=3, default='E')
     alcohol_attitude = models.CharField(choices=utils.attitude_choices, max_length=1, default='N')

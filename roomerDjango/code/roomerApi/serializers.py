@@ -49,6 +49,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class HousingSerializer(serializers.ModelSerializer):
     file_content = HousingPhotoSerializer(required=False, many=True)
+    host = ProfileSerializer()
 
     class Meta:
         model = models.Housing
