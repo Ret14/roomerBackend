@@ -5,6 +5,7 @@ import datetime
 from roomerApi import serializers
 from roomerApi import models
 from django.db.models import Q
+import logging
 
 
 class ProfileViewSet(ModelViewSet):
@@ -125,11 +126,13 @@ class HousingViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         files = request.FILES.getlist('file_content')
+        mutable_data = request.data.copy()
+        host_id = mutable_data.pop('host')[0]
         if files:
-            request.data.pop('file_content')
-            serializer = serializers.HousingSerializer(data=request.data)
+            mutable_data.pop('file_content')
+            serializer = serializers.HousingSerializer(data=mutable_data)
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(host_id=host_id)
                 housing_record = models.Housing.objects.get(id=serializer.data['id'])
                 uploaded_files = []
                 for file in files:
@@ -141,9 +144,9 @@ class HousingViewSet(viewsets.ModelViewSet):
                 return Response(context, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            serializer = serializers.HousingSerializer(data=request.data)
+            serializer = serializers.HousingSerializer(data=mutable_data)
             if serializer.is_valid():
-                serializer.save()
+                serializer.save(host_id=host_id)
                 context = serializer.data
                 return Response(context, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -7,6 +7,7 @@
 | 1.3    	 | 18.03.2023 	 |                                                                                     Исправил синтаксис команд curl                                                                                     |                                                            
 | 1.4    	 | 27.03.2023 	 |                                                                  Добавил параметры age_to, age_from в запрос фильтрации пользователей                                                                  |                                                            
 | 1.5    	 | 28.03.2023 	 |                                    Добавил параметр interests в запрос фильтрации пользователей. Вставил комментарий, описывающий алгоритм фильтрации и ограничения                                    |                                                            
+| 1.5    	 | 03.04.2023 	 |                                                                              Обновил некоторые примеры запросов и ответов                                                                              |                                                            
 
 [Аккаунты для тестирования](accounts.md)
 
@@ -230,7 +231,7 @@
     }
     ]
 #### Комментарий:
-Как происходит фильтрация по интересам: Считается кол-во переданных id интересов, умножается на 0.4 и округляется в большую сторону до целых. Это количество одинаковых значений в интересах юзера и интересах, переданных в запросе. Если число общих интересов у юзера и в запросе меньше, чем высчитанное число общих интересов, то он исключается из подборки фильтра. Максимум можно передать 30 id интересов
+Как происходит фильтрация по интересам: Считается кол-во переданных id интересов, умножается на 0.4 и округляется в большую сторону до целых. Это количество общих интересов в интересах юзера и интересах, переданных в запросе. Если число общих интересов у юзера и в запросе меньше, чем высчитанное число общих интересов, то он исключается из подборки фильтра. Максимум можно передать 30 id интересов
 ### Фильтрация квартир
 #### Бизнес постановка:
 Пользователь задает параметры фильтрации и получает список квартир, которые им удовлетворяют
@@ -260,34 +261,61 @@
     Response code: 200
     Response body:
     [{
+        "id": 302,
         "month_price": 54738,
         "host": {
-            "first_name": "Sara",
-            "last_name": "White",
-            "birth_date": "2022-12-21",
-            "sex": "F",
-            "avatar": "http://127.0.0.1:8000/static/img/default.png",
-            "about_me": "Full parent analysis. Recognize someone treatment over",
+            "id": 8,
+            "first_name": "Mary",
+            "last_name": "Collins",
+            "birth_date": "2017-07-28",
+            "sex": "M",
+            "avatar": "http://0.0.0.0:8000/media/avatar/default.jpg",
+            "email": "natalieholmes@example.net",
+            "about_me": "Many water meeting. Begin fight institution school white team.\nExplain current simply process sit. His can sing husband matter.\nPrevent hear trouble it grow. Should research executive black tough building. General during cost what.\nBody himself home message woman. Stock determine human find discussion military ability. First through dinner whose worker offer American.\nCustomer force both something hair. Well account movement can start.",
             "employment": "NE",
-            "alcohol_attitude": "I",
-            "smoking_attitude": "P",
-            "sleep_time": "N",
-            "personality_type": "M",
-            "clean_habits": "N",
+            "alcohol_attitude": "P",
+            "smoking_attitude": "N",
+            "sleep_time": "O",
+            "personality_type": "I",
+            "clean_habits": "C",
             "interests": [
-                78,
-                79,
-                83,
-                87,
-                90
-            ]},
-        "description": "Simple happen beat offer rate half.\nGuess what edge",
+                {
+                    "id": 10,
+                    "interest": "interview"
+                },
+                {
+                    "id": 15,
+                    "interest": "me"
+                },
+                {
+                    "id": 17,
+                    "interest": "past"
+                },
+                {
+                    "id": 19,
+                    "interest": "whatever"
+                },
+                {
+                    "id": 24,
+                    "interest": "challenge"
+                },
+                {
+                    "id": 28,
+                    "interest": "successful"
+                }
+            ]
+        },
+        "description": "some apartment",
+        "file_content": [
+            {
+                "photo": "http://0.0.0.0:8000/media/housing/2023/04/03/8405370_ozVWNYh.jpg"
+            }
+        ],
         "bathrooms_count": 2,
         "bedrooms_count": 4,
         "housing_type": "F",
         "room_attributes": [],
         "sharing_type": "P",
-        "photo": "http://176.113.83.93:8000/static/img/flat_default.jpeg"
     }]
 
 ### Добавление объявления
@@ -299,30 +327,89 @@
         http://176.113.83.93:8000/housing/ \
         -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139' \
         -F location='Astrakhan city' \
+        -F title='cool apartment' \
+        -F description='some apartment' \
         -F sharing_type=S \
-        -F host=300 \
+        -F host=5 \
         -F housing_type=F \
         -F file_content=@/home/rodion/Downloads/8405385.jpg \
-        -F file_content=@/home/rodion/Downloads/7474638.jpg \
-        -F bedrooms_count=5 \
+        -F bedrooms_count=2 \
         -F bathrooms_count=2
-#### Ответ:
+#### Ответ:    
+    Response code: 201
+    Response body:
     {
-        "id": 302,
-        "month_price": 5000,
-        "host": 300,
-        "description": "some apartment",
-        "file_content": [
-            3,
-            4
-        ],
-        "title": "some apartment",
-        "location": "Astrakhan city",
-        "bathrooms_count": 2,
-        "bedrooms_count": 5,
-        "housing_type": "F",
-        "room_attributes": [],
-        "sharing_type": "S"
+    "id": 301,
+    "month_price": 5000,
+    "host": {
+        "id": 5,
+        "first_name": "Jesus",
+        "last_name": "Fuller",
+        "birth_date": "1993-04-14",
+        "sex": "F",
+        "avatar": "/media/avatar/default.jpg",
+        "email": "dwerner@example.com",
+        "about_me": "Commercial special network foreign one agent candidate how. Member baby share sit.\nShould wide dog car do his part. Pick too blue street. Other majority final when new clear these.\nFinish summer else page region start size. Want decade firm section economic television. Employee public figure ground much.\nGovernment make article drop. Difficult president at. General professional career two. Itself group computer forget would section him.\nMove source wonder relate service. Tv important hope about catch than method. Bag down stock computer.\nSea stuff no response.\nBillion pick report past always future scene heavy. Usually already bed fall character door green save. Front sound war address morning explain.\nSignificant now energy. Lay return identify. Anything event yet effect quite reflect upon.\nMight history strong economy break word source. Only result race government trouble.",
+        "employment": "NE",
+        "alcohol_attitude": "P",
+        "smoking_attitude": "P",
+        "sleep_time": "D",
+        "personality_type": "E",
+        "clean_habits": "N",
+        "interests": [
+            {
+                "id": 2,
+                "interest": "image"
+            },
+            {
+                "id": 6,
+                "interest": "amount"
+            },
+            {
+                "id": 9,
+                "interest": "mention"
+            },
+            {
+                "id": 11,
+                "interest": "why"
+            },
+            {
+                "id": 12,
+                "interest": "step"
+            },
+            {
+                "id": 13,
+                "interest": "themselves"
+            },
+            {
+                "id": 17,
+                "interest": "past"
+            },
+            {
+                "id": 22,
+                "interest": "chair"
+            },
+            {
+                "id": 23,
+                "interest": "father"
+            },
+            {
+                "id": 28,
+                "interest": "successful"
+            }
+        ]
+    },
+    "description": "some apartment",
+    "file_content": [
+        1
+    ],
+    "title": "cool apartment",
+    "location": "Astrakhan city",
+    "bathrooms_count": 2,
+    "bedrooms_count": 2,
+    "housing_type": "F",
+    "room_attributes": [],
+    "sharing_type": "S"
     }
 #### Комментарий:
-file_content - фотографии помещения
+file_content - фотографии помещения. host - id пользователя, который создает объявление

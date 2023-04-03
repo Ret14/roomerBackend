@@ -49,7 +49,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class HousingSerializer(serializers.ModelSerializer):
     file_content = HousingPhotoSerializer(required=False, many=True)
-    host = ProfileSerializer()
+    host = ProfileSerializer(required=False)
 
     class Meta:
         model = models.Housing
