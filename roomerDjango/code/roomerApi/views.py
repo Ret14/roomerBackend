@@ -7,7 +7,7 @@ from roomerApi import models
 from django.db.models import Q
 
 
-class ProfileViewSet(ModelViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     queryset = models.Profile.objects.all()
 
     @staticmethod
@@ -22,6 +22,19 @@ class ProfileViewSet(ModelViewSet):
         return sum(x == y for x, y in zip(list_a, list_b))
 
     def filter_queryset(self, queryset):
+        sex = self.request.query_params.get('sex')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
+        if sex is not None:
+            queryset = queryset.filter(sex=sex)
         params = self.request.query_params
 
         if 'age_from' in params:
@@ -69,7 +82,7 @@ class ProfileViewSet(ModelViewSet):
                 if query_match_amount < matching_interests_amount:
                     queryset = queryset.exclude(id=query.id)
 
-        return queryset
+        return queryset[offset:offset + limit]
 
     serializer_class = serializers.ProfileSerializer
     permission_classes = [permissions.AllowAny]
@@ -92,6 +105,16 @@ class HousingViewSet(viewsets.ModelViewSet):
 
     def filter_queryset(self, queryset):
         month_price_from = self.request.query_params.get('month_price_from')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
         if month_price_from is not None:
             queryset = queryset.filter(month_price__gte=month_price_from)
 
@@ -121,7 +144,7 @@ class HousingViewSet(viewsets.ModelViewSet):
         if sharing_type is not None:
             queryset = queryset.filter(sharing_type=sharing_type)
 
-        return queryset
+        return queryset[offset:offset + limit]
 
     def create(self, request, *args, **kwargs):
         files = request.FILES.getlist('file_content')
@@ -164,13 +187,23 @@ class ChatsViewSet(viewsets.ModelViewSet):
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         chat_id = self.request.query_params.get('chat_id')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
         if user_id is not None:
             if chat_id != "":
                 queryset = queryset.filter(chat_id=chat_id)
             else:
                 queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct(
                     "chat_id")
-        return queryset
+        return queryset[offset:offset + limit]
 
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]
