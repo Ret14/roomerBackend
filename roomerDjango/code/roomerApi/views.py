@@ -25,9 +25,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
         sex = self.request.query_params.get('sex')
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
-        if (offset is None) & (isinstance(offset, int)):
+        if (offset is None) | (isinstance(offset, int)):
             offset = 0
-        if (limit is None) & (isinstance(limit, int)):
+        if (limit is None) | (isinstance(limit, int)):
             limit = 20
         if sex is not None:
             queryset = queryset.filter(sex=sex)
@@ -103,9 +103,9 @@ class HousingViewSet(viewsets.ModelViewSet):
         month_price_from = self.request.query_params.get('month_price_from')
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
-        if (offset is None) & (isinstance(offset, int)):
+        if (offset is None) | (isinstance(offset, int)):
             offset = 0
-        if (limit is None) & (isinstance(limit, int)):
+        if (limit is None) | (isinstance(limit, int)):
             limit = 20
         if month_price_from is not None:
             queryset = queryset.filter(month_price__gte=month_price_from)
@@ -179,11 +179,11 @@ class ChatsViewSet(viewsets.ModelViewSet):
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         chat_id = self.request.query_params.get('chat_id')
-        offset = int(self.request.query_params.get('offset'))
-        limit = int(self.request.query_params.get('limit'))
-        if (offset is None) & (isinstance(offset, int)):
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        if (offset is None) | (isinstance(offset, int)):
             offset = 0
-        if (limit is None) & (isinstance(limit, int)):
+        if (limit is None) | (isinstance(limit, int)):
             limit = 20
         if user_id is not None:
             if chat_id != "":
