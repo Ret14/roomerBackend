@@ -1,6 +1,7 @@
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
-
+from rest_framework.viewsets import ModelViewSet
+import datetime
 from roomerApi import serializers
 from roomerApi import models
 from django.db.models import Q
@@ -8,6 +9,17 @@ from django.db.models import Q
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = models.Profile.objects.all()
+
+    @staticmethod
+    def get_birth_date_from_age(age: int):
+        today_date = datetime.date.today()
+        today_year = today_date.year
+        target_year = today_year - age
+        return datetime.date(target_year, today_date.month, today_date.day)
+
+    @staticmethod
+    def get_common_items_amount(list_a: list, list_b: list):
+        return sum(x == y for x, y in zip(list_a, list_b))
 
     def filter_queryset(self, queryset):
         sex = self.request.query_params.get('sex')
@@ -19,30 +31,52 @@ class ProfileViewSet(viewsets.ModelViewSet):
             limit = 20
         if sex is not None:
             queryset = queryset.filter(sex=sex)
+        params = self.request.query_params
 
-        sleep_time = self.request.query_params.get('sleep_time')
-        if sleep_time is not None:
-            queryset = queryset.filter(sleep_time=sleep_time)
+        if 'age_from' in params:
+            queryset = queryset.filter(birth_date__range=(
+                datetime.date(1970, 1, 1),
+                self.get_birth_date_from_age(int(params['age_from']))
+            ))
 
-        personality_type = self.request.query_params.get('personality_type')
-        if personality_type is not None:
-            queryset = queryset.filter(personality_type=personality_type)
+        if 'age_to' in params:
+            queryset = queryset.filter(birth_date__range=(
+                self.get_birth_date_from_age(int(params['age_to'])),
+                datetime.date.today()
+            ))
 
-        employment = self.request.query_params.get('employment')
-        if employment is not None:
-            queryset = queryset.filter(employment=employment)
+        if 'sex' in params:
+            queryset = queryset.filter(sex=params['sex'])
 
-        alcohol_attitude = self.request.query_params.get('alcohol_attitude')
-        if alcohol_attitude is not None:
-            queryset = queryset.filter(alcohol_attitude=alcohol_attitude)
+        if 'sleep_time' in params:
+            queryset = queryset.filter(sleep_time=params['sleep_time'])
 
-        smoking_attitude = self.request.query_params.get('smoking_attitude')
-        if smoking_attitude is not None:
-            queryset = queryset.filter(smoking_attitude=smoking_attitude)
+        if 'personality_type' in params:
+            queryset = queryset.filter(personality_type=params['personality_type'])
 
-        clean_habits = self.request.query_params.get('clean_habits')
-        if clean_habits is not None:
-            queryset = queryset.filter(clean_habits=clean_habits)
+        if 'employment' in params:
+            queryset = queryset.filter(employment=params['employment'])
+
+        if 'alcohol_attitude' in params:
+            queryset = queryset.filter(alcohol_attitude=params['alcohol_attitude'])
+
+        if 'smoking_attitude' in params:
+            queryset = queryset.filter(smoking_attitude=params['smoking_attitude'])
+
+        if 'clean_habits' in params:
+            queryset = queryset.filter(clean_habits=params['clean_habits'])
+
+        if 'interests' in params:
+            interests_ids = list(map(lambda x: int(x), params.getlist('interests')))
+            if len(interests_ids) == 1:
+                matching_interests_amount = 1
+            else:
+                matching_interests_amount = round(len(interests_ids) * 0.4)
+            for query in queryset:
+                query_interests_ids = list(map(lambda x: int(x['id']), query.interests.values('id')))
+                query_match_amount = len(set(query_interests_ids) & set(interests_ids))
+                if query_match_amount < matching_interests_amount:
+                    queryset = queryset.exclude(id=query.id)
 
         return queryset[offset:offset + limit]
 
@@ -83,14 +117,14 @@ class HousingViewSet(viewsets.ModelViewSet):
         bathrooms_count = self.request.query_params.get('bathrooms_count')
         if bathrooms_count is not None:
             if bathrooms_count == '>3':
-                queryset = queryset.filter(bathrooms_count__gte=3)
+                queryset = queryset.filter(bathrooms_count__gt=3)
             else:
                 queryset = queryset.filter(bathrooms_count=bathrooms_count)
 
         bedrooms_count = self.request.query_params.get('bedrooms_count')
         if bedrooms_count is not None:
             if bedrooms_count == '>3':
-                queryset = queryset.filter(bedrooms_count__gte=3)
+                queryset = queryset.filter(bedrooms_count__gt=3)
             else:
                 queryset = queryset.filter(bedrooms_count=bedrooms_count)
 

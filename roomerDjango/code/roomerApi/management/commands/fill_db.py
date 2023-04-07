@@ -24,7 +24,7 @@ class Command(BaseCommand):
         self.fake.add_provider(geo)
 
         try:
-            self.create_interests(ratio)
+            self.create_interests(30)
             self.create_profiles(ratio)
             self.create_housings(ratio)
         except Exception:
@@ -69,6 +69,7 @@ class Command(BaseCommand):
                            sleep_time=random.choice(sleep_time_choices),
                            personality_type=random.choice(personality_choices),
                            clean_habits=random.choice(clean_choices),
+                           birth_date=self.fake.date_between()
                            )
             for _ in range(amount)]
 
@@ -97,7 +98,7 @@ class Command(BaseCommand):
 
         interest_to_profile_links = []
         for profile_id in profile_ids:
-            profile_interests = random.sample(interests_ids, random.randint(1, 10))
+            profile_interests = random.sample(interests_ids, random.randint(5, 10))
             for interest_id in profile_interests:
                 interest_profile = models.Profile.interests.through(profile_id=profile_id, interest_id=interest_id)
                 interest_to_profile_links.append(interest_profile)
