@@ -27,8 +27,12 @@ class ProfileViewSet(viewsets.ModelViewSet):
         limit = self.request.query_params.get('limit')
         if (offset is None) | (isinstance(offset, int)):
             offset = 0
+        else:
+            offset = int(offset)
         if (limit is None) | (isinstance(limit, int)):
             limit = 20
+        else:
+            limit = int(limit)
         if sex is not None:
             queryset = queryset.filter(sex=sex)
         params = self.request.query_params
@@ -105,8 +109,12 @@ class HousingViewSet(viewsets.ModelViewSet):
         limit = self.request.query_params.get('limit')
         if (offset is None) | (isinstance(offset, int)):
             offset = 0
+        else:
+            offset = int(offset)
         if (limit is None) | (isinstance(limit, int)):
             limit = 20
+        else:
+            limit = int(limit)
         if month_price_from is not None:
             queryset = queryset.filter(month_price__gte=month_price_from)
 
@@ -183,8 +191,12 @@ class ChatsViewSet(viewsets.ModelViewSet):
         limit = self.request.query_params.get('limit')
         if (offset is None) | (isinstance(offset, int)):
             offset = 0
+        else:
+            offset = int(offset)
         if (limit is None) | (isinstance(limit, int)):
             limit = 20
+        else:
+            limit = int(limit)
         if user_id is not None:
             if chat_id != "":
                 queryset = queryset.filter(chat_id=chat_id)
