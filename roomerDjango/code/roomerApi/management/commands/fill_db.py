@@ -25,6 +25,7 @@ class Command(BaseCommand):
 
         try:
             self.create_interests(30)
+            self.create_cities()
             self.create_profiles(ratio)
             self.create_housings(ratio)
         except Exception:
@@ -47,6 +48,15 @@ class Command(BaseCommand):
         ]
         models.Interest.objects.bulk_create(interests)
 
+    def create_cities(self):
+        with open('../utils/cities.txt', 'r') as cities_file:
+            cities = cities_file.read().strip().split(', ')
+        cities_objects = [
+            models.Cities(city=city)
+            for city in cities
+        ]
+        models.Cities.objects.bulk_create(cities_objects)
+
     def create_profiles(self, amount):
         sex_field_choices = ('M', 'F')
         attitude_choices = ('P', 'N', 'I')
@@ -55,8 +65,11 @@ class Command(BaseCommand):
         clean_choices = ('N', 'D', 'C')
         employment_choices = ('NE', 'E', 'S')
 
+        city_ids = list(models.City.objects.values_list('id', flat=True))
+
         profiles = [
             models.Profile(email=self.fake.email(),
+                           city_id=random.choice(city_ids),
                            username=self.create_random_string(5, 20),
                            password=self.fake.password(length=random.randint(20, 50)),
                            first_name=self.fake.first_name(),
@@ -79,6 +92,7 @@ class Command(BaseCommand):
         for name in names:
             for i in range(3):
                 models.Profile.objects.create_user(
+                    city_id=random.choice(city_ids),
                     email=self.fake.email(),
                     username=f'{name}_user_{i}',
                     password=password,

@@ -82,6 +82,12 @@ class InterestsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
+class CitiesViewSet(viewsets.ModelViewSet):
+    queryset = models.City.objects.all()
+    serializer_class = serializers.CitySerializer
+    permission_classes = [permissions.AllowAny]
+
+
 class RoomAttributeViewSet(viewsets.ModelViewSet):
     queryset = models.RoomAttribute.objects.all()
     serializer_class = serializers.RoomAttributeSerializer

@@ -8,6 +8,12 @@ class InterestSerializer(serializers.ModelSerializer):
         fields = ['id', 'interest']
 
 
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.City
+        fields = ['id', 'city']
+
+
 class HousingPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.HousingPhoto
@@ -32,7 +38,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profile
         fields = [
-            'id', 'first_name', 'last_name', 'birth_date', 'sex', 'avatar', 'email', 'about_me',
+            'id', 'first_name', 'last_name', 'birth_date', 'sex', 'avatar', 'email', 'about_me', 'city',
             'employment', 'alcohol_attitude', 'smoking_attitude', 'sleep_time',
             'personality_type', 'clean_habits', 'interests'
         ]
