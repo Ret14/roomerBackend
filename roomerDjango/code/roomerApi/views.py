@@ -10,6 +10,12 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def filter_queryset(self, queryset):
         sex = self.request.query_params.get('sex')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        if offset is None:
+            offset = 0
+        if limit is None:
+            limit = 20
         if sex is not None:
             queryset = queryset.filter(sex=sex)
 
@@ -37,7 +43,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if clean_habits is not None:
             queryset = queryset.filter(clean_habits=clean_habits)
 
-        return queryset
+        return queryset[offset:offset+limit]
 
     serializer_class = serializers.ProfileSerializer
     permission_classes = [permissions.AllowAny]
@@ -60,6 +66,12 @@ class HousingViewSet(viewsets.ModelViewSet):
 
     def filter_queryset(self, queryset):
         month_price_from = self.request.query_params.get('month_price_from')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        if offset is None:
+            offset = 0
+        if limit is None:
+            limit = 20
         if month_price_from is not None:
             queryset = queryset.filter(month_price__gte=month_price_from)
 
@@ -89,7 +101,7 @@ class HousingViewSet(viewsets.ModelViewSet):
         if sharing_type is not None:
             queryset = queryset.filter(sharing_type=sharing_type)
 
-        return queryset
+        return queryset[offset:offset+limit]
 
     def create(self, request, *args, **kwargs):
         files = request.FILES.getlist('file_content')
@@ -132,12 +144,18 @@ class ChatsViewSet(viewsets.ModelViewSet):
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         chat_id = self.request.query_params.get('chat_id')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        if offset is None:
+            offset = 0
+        if limit is None:
+            limit = 20
         if user_id is not None:
             if chat_id != "":
                 queryset = queryset.filter(chat_id=chat_id)
             else:
                 queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct("chat_id")
-        return queryset
+        return queryset[offset:offset+limit]
 
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]
