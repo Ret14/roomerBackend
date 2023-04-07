@@ -205,5 +205,15 @@ class ChatsViewSet(viewsets.ModelViewSet):
                     "chat_id")
         return queryset[offset:offset + limit]
 
+    def update(self, queryset):
+        message_id = self.request.query_params.get('message_id')
+        if message_id is not None:
+            message = queryset.filter(id=message_id).first()
+            message['isChecked'] = True
+            message.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]
