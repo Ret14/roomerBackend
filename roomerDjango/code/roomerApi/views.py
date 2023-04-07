@@ -27,11 +27,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
         limit = self.request.query_params.get('limit')
         try:
             offset = int(offset)
-        except ValueError:
+        except ValueError | TypeError:
             offset = 0
         try:
             limit = int(limit)
-        except ValueError:
+        except ValueError | TypeError:
             limit = 20
         if sex is not None:
             queryset = queryset.filter(sex=sex)
