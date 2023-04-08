@@ -1,5 +1,3 @@
-import logging
-
 from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
