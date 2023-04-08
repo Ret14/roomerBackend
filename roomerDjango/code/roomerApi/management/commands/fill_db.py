@@ -26,7 +26,7 @@ class Command(BaseCommand):
         try:
             self.create_interests(30)
             self.create_profiles(ratio)
-            self.create_messages(ratio)
+            # self.create_messages(ratio)
             self.create_housings(ratio)
         except Exception:
             # models.Profile.objects.all().delete()
