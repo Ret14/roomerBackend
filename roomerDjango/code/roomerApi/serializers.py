@@ -59,8 +59,8 @@ class HousingSerializer(serializers.ModelSerializer):
 
 
 class ChatsSerializer(serializers.ModelSerializer):
-    donor = ProfileSerializer()
-    recipient = ProfileSerializer()
+    donor = ProfileSerializer(required=False)
+    recipient = ProfileSerializer(required=False)
 
     class Meta:
         model = models.Message

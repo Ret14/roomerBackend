@@ -3,7 +3,6 @@ import logging
 from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 import datetime
 from roomerApi import serializers
 from roomerApi import models
@@ -191,12 +190,10 @@ class ChatsViewSet(viewsets.ModelViewSet):
     def mark_checked(self, request, pk=None):
         message = self.queryset.filter(id=pk)[0]
         if message:
-            message.is_checked = True
-            message.save()
-            serializer = self.get_serializer(data=self.queryset.filter(id=pk).values()[0])
-            logging.critical(self.queryset.filter(id=pk).values()[0])
+            data = {"is_checked": True}
+            serializer = self.get_serializer(message, data=data, partial=True)
             if serializer.is_valid():
-                self.perform_update(serializer)
+                serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -222,16 +219,6 @@ class ChatsViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct(
                     "chat_id")
         return queryset[offset:offset + limit]
-
-    # def update(self, queryset):
-    #     message_id = self.request.query_params.get('message_id')
-    #     if message_id is not None:
-    #         message = queryset.filter(id=message_id).first()
-    #         message['is_checked'] = True
-    #         message.save()
-    #         return Response(status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]

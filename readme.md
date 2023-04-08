@@ -326,3 +326,134 @@
     }
 #### Комментарий:
 file_content - фотографии помещения
+
+### Изменение статуса сообщения на "прочитано"
+#### Примеры запросов
+#### Запрос:
+    curl -X PUT \
+    http://176.113.83.93:8000/chats/1/mark_checked/ \
+    -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+#### Ответ:
+    Response code: 200
+    Response body:
+    {
+    "id": 1,
+    "chat_id": 286,
+    "date_time": "2023-04-08T12:27:29.477137Z",
+    "text": "Hot must thus effort walk everybody rest. Tv parent phone major politics usually.\nMyself reveal list.",
+    "donor": {
+        "id": 108,
+        "first_name": "Alan",
+        "last_name": "Guzman",
+        "birth_date": "1995-07-24",
+        "sex": "M",
+        "avatar": "http://0.0.0.0:8000/media/static/img/default.jpg",
+        "email": "warnold@example.com",
+        "about_me": "Buy eight student view talk commercial. Control difference nor now.\nCommon church street activity imagine. Choose against name ability anything employee. Near like civil over.\nReally our clearly letter air police both. Professional consumer unit school suddenly American company myself. Make week send away rather.\nStep special between true owner eight than. Method out employee. Standard character when production other everybody. Course throw view budget.\nDinner blood million guess understand street.",
+        "employment": "NE",
+        "alcohol_attitude": "I",
+        "smoking_attitude": "N",
+        "sleep_time": "N",
+        "personality_type": "M",
+        "clean_habits": "C",
+        "interests": [
+            {
+                "id": 2,
+                "interest": "image"
+            },
+            {
+                "id": 3,
+                "interest": "son"
+            },
+            {
+                "id": 5,
+                "interest": "kitchen"
+            },
+            {
+                "id": 7,
+                "interest": "event"
+            },
+            {
+                "id": 13,
+                "interest": "themselves"
+            },
+            {
+                "id": 15,
+                "interest": "me"
+            },
+            {
+                "id": 19,
+                "interest": "whatever"
+            },
+            {
+                "id": 23,
+                "interest": "father"
+            },
+            {
+                "id": 27,
+                "interest": "present"
+            }
+        ]
+    },
+    "recipient": {
+        "id": 185,
+        "first_name": "Justin",
+        "last_name": "Andrews",
+        "birth_date": "2006-01-19",
+        "sex": "M",
+        "avatar": "http://0.0.0.0:8000/media/static/img/default.jpg",
+        "email": "jessica03@example.net",
+        "about_me": "Class represent painting term charge other break cover. Final why receive far economic. Let everyone although hotel air. Exactly over decade above under among.\nDraw nor outside remember car actually. On send tend. Country song force car sit candidate.\nWait against business character. Good certainly front add despite always material food. Together produce that what foreign stand. Spring significant similar issue.\nThis enjoy boy former PM task enter economic. Before catch around environment rock include entire. Example expect front prevent read woman current.\nSeek exist worker future share pattern. Feel seat property. Low but daughter fear newspaper money ahead.\nAmong material work wife read. Score reason reason how firm. Over why statement become.\nNatural black anything arrive go stay might.",
+        "employment": "NE",
+        "alcohol_attitude": "I",
+        "smoking_attitude": "I",
+        "sleep_time": "N",
+        "personality_type": "I",
+        "clean_habits": "D",
+        "interests": [
+            {
+                "id": 1,
+                "interest": "three"
+            },
+            {
+                "id": 2,
+                "interest": "image"
+            },
+            {
+                "id": 9,
+                "interest": "mention"
+            },
+            {
+                "id": 10,
+                "interest": "interview"
+            },
+            {
+                "id": 14,
+                "interest": "floor"
+            },
+            {
+                "id": 17,
+                "interest": "past"
+            },
+            {
+                "id": 19,
+                "interest": "whatever"
+            },
+            {
+                "id": 20,
+                "interest": "discover"
+            },
+            {
+                "id": 21,
+                "interest": "mother"
+            },
+            {
+                "id": 24,
+                "interest": "challenge"
+            }
+        ]
+    },
+    "is_checked": true
+    }
+#### Комментарий:
+Число в url - id сообщения
