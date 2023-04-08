@@ -64,4 +64,4 @@ class ChatsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Message
-        fields = ['id', 'chat_id', 'date_time', 'text', 'donor', 'recipient', 'isChecked']
+        fields = ['id', 'chat_id', 'date_time', 'text', 'donor', 'recipient', 'is_checked']

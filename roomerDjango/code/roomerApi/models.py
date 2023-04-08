@@ -65,4 +65,4 @@ class Message(models.Model):
     text = models.CharField(max_length=512)
     donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor')
     recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='recipient')
-    isChecked = models.BooleanField(default=False)
+    is_checked = models.BooleanField(default=False)

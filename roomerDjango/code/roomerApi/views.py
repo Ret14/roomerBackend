@@ -1,4 +1,7 @@
+import logging
+
 from rest_framework import permissions, viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 import datetime
@@ -184,6 +187,21 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class ChatsViewSet(viewsets.ModelViewSet):
     queryset = models.Message.objects.all()
 
+    @action(methods=['put'], detail=True, permission_classes=[permissions.IsAuthenticated])
+    def mark_checked(self, request, pk=None):
+        message = self.queryset.filter(id=pk)[0]
+        if message:
+            message.is_checked = True
+            message.save()
+            serializer = self.get_serializer(data=self.queryset.filter(id=pk).values()[0])
+            logging.critical(self.queryset.filter(id=pk).values()[0])
+            if serializer.is_valid():
+                self.perform_update(serializer)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         chat_id = self.request.query_params.get('chat_id')
@@ -205,15 +223,15 @@ class ChatsViewSet(viewsets.ModelViewSet):
                     "chat_id")
         return queryset[offset:offset + limit]
 
-    def update(self, queryset):
-        message_id = self.request.query_params.get('message_id')
-        if message_id is not None:
-            message = queryset.filter(id=message_id).first()
-            message['isChecked'] = True
-            message.save()
-            return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    # def update(self, queryset):
+    #     message_id = self.request.query_params.get('message_id')
+    #     if message_id is not None:
+    #         message = queryset.filter(id=message_id).first()
+    #         message['is_checked'] = True
+    #         message.save()
+    #         return Response(status=status.HTTP_201_CREATED)
+    #     else:
+    #         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]
