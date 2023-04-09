@@ -72,4 +72,4 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Notification
-        fields = ['id', 'message']
+        fields = ['id', 'message', 'recipient_id']
