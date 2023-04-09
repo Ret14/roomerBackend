@@ -188,11 +188,12 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
-        if user_id is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        notification = queryset.filter(message__recipient_id=user_id)
-        queryset.filter(message__recipient_id=user_id).delete()
-        return notification
+        if user_id is not None:
+            notification = queryset.filter(message__recipient_id=user_id)
+            queryset.filter(message__recipient_id=user_id).delete()
+            return notification
+        else:
+            return queryset
 
 
 class ChatsViewSet(viewsets.ModelViewSet):
