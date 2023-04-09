@@ -186,7 +186,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     queryset = models.Notification.objects.all()
     serializer_class = serializers.NotificationSerializer
 
-    def get_notifications(self, queryset):
+    def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         if user_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
