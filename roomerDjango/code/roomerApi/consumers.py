@@ -30,7 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                                                recipient=recipient_profile, text=message,
                                                date_time=datetime.datetime.now())
         message_model.save()
-        notification_model = Notification.objects.create(message=message_model)
+        notification_model = Notification.objects.create(message=Message.objects.get(id=message_model.id))
         notification_model.save()
         dict_obj = model_to_dict(message_model)
         serialized = json.dumps(dict_obj)
