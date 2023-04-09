@@ -68,6 +68,8 @@ class ChatsSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
+    message = ChatsSerializer(required=False)
+
     class Meta:
         model = models.Notification
         fields = ['id', 'message']
