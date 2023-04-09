@@ -182,6 +182,17 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = models.Notification.objects.all()
+    serializer_class = serializers.NotificationSerializer
+
+    def get_notifications(self, queryset):
+        user_id = self.request.query_params.get('user_id')
+        notification = queryset.filter(recipient_id=user_id)
+        queryset.filter(recipient_id=user_id).delete()
+        return notification
+
+
 class ChatsViewSet(viewsets.ModelViewSet):
     queryset = models.Message.objects.all()
 
