@@ -28,8 +28,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_model = Message.objects.create(chat_id=donor_id + recipient_id, donor=donor_profile,
                                                recipient=recipient_profile, text=message,
                                                date_time=datetime.datetime.now())
-        notification_model = Notification.objects.create(message=message_model)
         message_model.save()
+        notification_model = Notification.objects.create(message=Message.objects.get_queryset().filter(id=message_model['id']))
         notification_model.save()
         dict_obj = model_to_dict(message_model)
         serialized = json.dumps(dict_obj)
