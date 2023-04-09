@@ -188,6 +188,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
     def get_notifications(self, queryset):
         user_id = self.request.query_params.get('user_id')
+        if user_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         notification = queryset.filter(recipient_id=user_id)
         queryset.filter(recipient_id=user_id).delete()
         return notification
