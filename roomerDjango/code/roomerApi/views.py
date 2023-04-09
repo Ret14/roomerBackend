@@ -205,6 +205,7 @@ class ChatsViewSet(viewsets.ModelViewSet):
         if message:
             data = {"is_checked": True}
             serializer = self.get_serializer(message, data=data, partial=True)
+            models.Notification.objects.filter(message_id=pk).delete()
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
