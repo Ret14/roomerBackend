@@ -1,4 +1,5 @@
 from rest_framework import permissions, viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 import datetime
@@ -7,7 +8,7 @@ from roomerApi import models
 from django.db.models import Q
 
 
-class ProfileViewSet(ModelViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     queryset = models.Profile.objects.all()
 
     @staticmethod
@@ -23,6 +24,16 @@ class ProfileViewSet(ModelViewSet):
 
     def filter_queryset(self, queryset):
         params = self.request.query_params
+        offset = params.get('offset')
+        limit = params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
 
         if 'age_from' in params:
             queryset = queryset.filter(birth_date__range=(
@@ -74,7 +85,7 @@ class ProfileViewSet(ModelViewSet):
             city_id = models.City.objects.get(city=city).id
             queryset = queryset.filter(city_id=city_id)
 
-        return queryset
+        return queryset[offset:offset + limit]
 
     serializer_class = serializers.ProfileSerializer
     permission_classes = [permissions.AllowAny]
@@ -103,6 +114,16 @@ class HousingViewSet(viewsets.ModelViewSet):
 
     def filter_queryset(self, queryset):
         month_price_from = self.request.query_params.get('month_price_from')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
         if month_price_from is not None:
             queryset = queryset.filter(month_price__gte=month_price_from)
 
@@ -132,7 +153,7 @@ class HousingViewSet(viewsets.ModelViewSet):
         if sharing_type is not None:
             queryset = queryset.filter(sharing_type=sharing_type)
 
-        return queryset
+        return queryset[offset:offset + limit]
 
     def create(self, request, *args, **kwargs):
         files = request.FILES.getlist('file_content')
@@ -171,19 +192,57 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = models.Notification.objects.all()
+    serializer_class = serializers.NotificationSerializer
+
+    def filter_queryset(self, queryset):
+        user_id = self.request.query_params.get('user_id')
+        if user_id is not None:
+            notification = list(queryset.filter(message__recipient_id=user_id).all())
+            queryset.filter(message__recipient_id=user_id).delete()
+            return notification
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 class ChatsViewSet(viewsets.ModelViewSet):
     queryset = models.Message.objects.all()
+
+    @action(methods=['put'], detail=True, permission_classes=[permissions.IsAuthenticated])
+    def mark_checked(self, request, pk=None):
+        message = self.queryset.filter(id=pk)[0]
+        if message:
+            data = {"is_checked": True}
+            serializer = self.get_serializer(message, data=data, partial=True)
+            models.Notification.objects.filter(message_id=pk).delete()
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         chat_id = self.request.query_params.get('chat_id')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
         if user_id is not None:
             if chat_id != "":
                 queryset = queryset.filter(chat_id=chat_id)
             else:
                 queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct(
                     "chat_id")
-        return queryset
+        return queryset[offset:offset + limit]
 
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]

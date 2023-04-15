@@ -27,6 +27,7 @@ class Command(BaseCommand):
             self.create_interests(30)
             self.create_cities()
             self.create_profiles(ratio)
+            # self.create_messages(ratio)
             self.create_housings(ratio)
         except Exception:
             # models.Profile.objects.all().delete()
@@ -56,6 +57,19 @@ class Command(BaseCommand):
             for city in cities
         ]
         models.City.objects.bulk_create(cities_objects)
+
+    def create_messages(self, amount):
+        profile_ids = list(models.Profile.objects.values_list('id', flat=True))
+        messages = [
+            models.Message(
+                chat_id=random.randint(0, 1000),
+                text=self.fake.text(max_nb_chars=random.randint(100, 200)),
+                donor_id=random.choice(profile_ids),
+                recipient_id=random.choice(profile_ids)
+            )
+            for _ in range(amount)
+        ]
+        models.Message.objects.bulk_create(messages)
 
     def create_profiles(self, amount):
         sex_field_choices = ('M', 'F')

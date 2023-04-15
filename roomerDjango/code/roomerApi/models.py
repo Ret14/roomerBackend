@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from roomerApi import utils
@@ -18,7 +17,6 @@ class RoomAttribute(models.Model):
 
 
 class Profile(AbstractUser):
-
     birth_date = models.DateField(default='2022-01-30')
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
     sex = models.CharField(choices=utils.sex_field_choices, max_length=1, default='M')
@@ -70,4 +68,9 @@ class Message(models.Model):
     text = models.CharField(max_length=512)
     donor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='donor')
     recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='recipient')
-    isChecked = models.BooleanField(default=False)
+    is_checked = models.BooleanField(default=False)
+
+
+class Notification(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    created = models.DateField(auto_now=True)
