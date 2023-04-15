@@ -49,13 +49,13 @@ class Command(BaseCommand):
         models.Interest.objects.bulk_create(interests)
 
     def create_cities(self):
-        with open('../utils/cities.txt', 'r') as cities_file:
+        with open('./roomerApi/management/utils/cities.txt', 'r') as cities_file:
             cities = cities_file.read().strip().split(', ')
         cities_objects = [
-            models.Cities(city=city)
+            models.City(city=city)
             for city in cities
         ]
-        models.Cities.objects.bulk_create(cities_objects)
+        models.City.objects.bulk_create(cities_objects)
 
     def create_profiles(self, amount):
         sex_field_choices = ('M', 'F')

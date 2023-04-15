@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import serializers
 from roomerApi import models
 
@@ -34,6 +36,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     interests = InterestSerializer(many=True, required=False)
+    city = serializers.CharField(required=False, source='city.city')
 
     class Meta:
         model = models.Profile
@@ -44,11 +47,16 @@ class ProfileSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
+        logging.critical(validated_data)
         if 'interests' in validated_data:
             interests = validated_data.pop('interests')
             for interest in interests:
                 interest_obj = models.Interest.objects.get(interest=interest['interest'])
                 instance.interests.add(interest_obj)
+        if 'city' in validated_data:
+            city = validated_data.pop('city')['city']
+            city_obj = models.City.objects.get(city=city)
+            instance.city = city_obj
 
         return super().update(instance, validated_data)
 

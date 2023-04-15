@@ -70,6 +70,11 @@ class ProfileViewSet(ModelViewSet):
                 if query_match_amount < matching_interests_amount:
                     queryset = queryset.exclude(id=query.id)
 
+        if 'city' in params:
+            city = params['city']
+            city_id = models.City.objects.get(city=city).id
+            queryset = queryset.filter(city_id=city_id)
+
         return queryset
 
     serializer_class = serializers.ProfileSerializer
