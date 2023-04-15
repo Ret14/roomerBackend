@@ -7,8 +7,9 @@
 | 1.3    	 | 18.03.2023 	 |                                                                                     Исправил синтаксис команд curl                                                                                     |                                                            
 | 1.4    	 | 27.03.2023 	 |                                                                  Добавил параметры age_to, age_from в запрос фильтрации пользователей                                                                  |                                                            
 | 1.5    	 | 28.03.2023 	 |                                    Добавил параметр interests в запрос фильтрации пользователей. Вставил комментарий, описывающий алгоритм фильтрации и ограничения                                    |                                                            
-| 1.5    	 | 03.04.2023 	 |                                                                              Обновил некоторые примеры запросов и ответов                                                                              |                                                            
-| 1.5    	 | 08.04.2023 	 |                                                                            Добавил запрос для пометки прочитанных сообщений                                                                            |                                                            
+| 1.6    	 | 03.04.2023 	 |                                                                              Обновил некоторые примеры запросов и ответов                                                                              |                                                            
+| 1.7    	 | 08.04.2023 	 |                                                                            Добавил запрос для пометки прочитанных сообщений                                                                            |                                                            
+| 1.8    	 | 15.04.2023 	 |                                                                                   Добавил город в некоторые запросы                                                                                    |                                                            
 
 [Аккаунты для тестирования](accounts.md)
 
@@ -150,6 +151,7 @@
     -F smoking_attitude=I \
     -F sleep_time=N \
     -F personality_type=I \
+    -F city=Москва \
     -F clean_habits=N
 #### Ответ:
     Response code: 200
@@ -163,6 +165,7 @@
         "avatar": "http://176.113.83.93:8000/media/avatar/2023/03/12/8405385_RVkXKvi.jpg",
         "email": "rivan@mail.ru",
         "about_me": "some person description",
+        "city": "Москва",
         "employment": "E",
         "alcohol_attitude": "I",
         "smoking_attitude": "I",
@@ -179,7 +182,7 @@
 #### Примеры запросов
 #### Запрос:
     curl -X GET \
-    http://176.113.83.93/profile/?sex=M&employment=E&alcohol_attitude=N&smoking_attitude=I&sleep_time=O&personality_type=E&clean_habits=N&age_from=18&age_to=28&interests=2&interests=3&interests=1&interests=6
+    http://176.113.83.93/profile/?sex=M&employment=E&alcohol_attitude=N&smoking_attitude=I&sleep_time=O&personality_type=E&clean_habits=N&age_from=18&age_to=28&interests=2&interests=3&interests=1&interests=6&city=Москва
 #### Ответ:
     Response code: 200
     Response body:
@@ -193,6 +196,7 @@
         "avatar": "http://0.0.0.0:8000/media/static/img/default.jpg",
         "email": "martinaaron@example.com",
         "about_me": "Time arm from force analysis. Wind thank impact miss into.\nTree page across once station. Meeting themselves piece relationship. Protect put carry.\nFar take hold his us. Take inside research her attack yet.\nPerform listen size resource. Investment remember may knowledge. Health chair morning hold listen his media.\nInternational table make. Opportunity against dog start vote simply.\nTravel nature drop sport really hair. Plant them wish learn edge body. Institution often they stop beyond former ground. Those own forward break.",
+        "city": "Москва",
         "employment": "E",
         "alcohol_attitude": "N",
         "smoking_attitude": "I",
@@ -273,6 +277,7 @@
             "avatar": "http://0.0.0.0:8000/media/avatar/default.jpg",
             "email": "natalieholmes@example.net",
             "about_me": "Many water meeting. Begin fight institution school white team.\nExplain current simply process sit. His can sing husband matter.\nPrevent hear trouble it grow. Should research executive black tough building. General during cost what.\nBody himself home message woman. Stock determine human find discussion military ability. First through dinner whose worker offer American.\nCustomer force both something hair. Well account movement can start.",
+            "city": "Москва",
             "employment": "NE",
             "alcohol_attitude": "P",
             "smoking_attitude": "N",
@@ -351,6 +356,7 @@
         "avatar": "/media/avatar/default.jpg",
         "email": "dwerner@example.com",
         "about_me": "Commercial special network foreign one agent candidate how. Member baby share sit.\nShould wide dog car do his part. Pick too blue street. Other majority final when new clear these.\nFinish summer else page region start size. Want decade firm section economic television. Employee public figure ground much.\nGovernment make article drop. Difficult president at. General professional career two. Itself group computer forget would section him.\nMove source wonder relate service. Tv important hope about catch than method. Bag down stock computer.\nSea stuff no response.\nBillion pick report past always future scene heavy. Usually already bed fall character door green save. Front sound war address morning explain.\nSignificant now energy. Lay return identify. Anything event yet effect quite reflect upon.\nMight history strong economy break word source. Only result race government trouble.",
+        "city": "Москва",
         "employment": "NE",
         "alcohol_attitude": "P",
         "smoking_attitude": "P",
@@ -438,6 +444,7 @@ file_content - фотографии помещения. host - id пользов
         "avatar": "http://0.0.0.0:8000/media/static/img/default.jpg",
         "email": "warnold@example.com",
         "about_me": "Buy eight student view talk commercial. Control difference nor now.\nCommon church street activity imagine. Choose against name ability anything employee. Near like civil over.\nReally our clearly letter air police both. Professional consumer unit school suddenly American company myself. Make week send away rather.\nStep special between true owner eight than. Method out employee. Standard character when production other everybody. Course throw view budget.\nDinner blood million guess understand street.",
+        "city": "Москва",
         "employment": "NE",
         "alcohol_attitude": "I",
         "smoking_attitude": "N",
@@ -492,6 +499,7 @@ file_content - фотографии помещения. host - id пользов
         "avatar": "http://0.0.0.0:8000/media/static/img/default.jpg",
         "email": "jessica03@example.net",
         "about_me": "Class represent painting term charge other break cover. Final why receive far economic. Let everyone although hotel air. Exactly over decade above under among.\nDraw nor outside remember car actually. On send tend. Country song force car sit candidate.\nWait against business character. Good certainly front add despite always material food. Together produce that what foreign stand. Spring significant similar issue.\nThis enjoy boy former PM task enter economic. Before catch around environment rock include entire. Example expect front prevent read woman current.\nSeek exist worker future share pattern. Feel seat property. Low but daughter fear newspaper money ahead.\nAmong material work wife read. Score reason reason how firm. Over why statement become.\nNatural black anything arrive go stay might.",
+        "city": "Москва",
         "employment": "NE",
         "alcohol_attitude": "I",
         "smoking_attitude": "I",
