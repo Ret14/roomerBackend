@@ -5,7 +5,6 @@ import datetime
 from roomerApi import serializers
 from roomerApi import models
 from django.db.models import Q
-import logging
 
 
 class ProfileViewSet(ModelViewSet):
