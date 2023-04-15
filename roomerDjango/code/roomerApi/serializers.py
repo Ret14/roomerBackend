@@ -59,9 +59,17 @@ class HousingSerializer(serializers.ModelSerializer):
 
 
 class ChatsSerializer(serializers.ModelSerializer):
-    donor = ProfileSerializer()
-    recipient = ProfileSerializer()
+    donor = ProfileSerializer(required=False)
+    recipient = ProfileSerializer(required=False)
 
     class Meta:
         model = models.Message
-        fields = ['id', 'chat_id', 'date_time', 'text', 'donor', 'recipient', 'isChecked']
+        fields = ['id', 'chat_id', 'date_time', 'text', 'donor', 'recipient', 'is_checked']
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    message = ChatsSerializer()
+
+    class Meta:
+        model = models.Notification
+        fields = ['id', 'message']

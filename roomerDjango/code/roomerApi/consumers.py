@@ -18,6 +18,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         from roomerApi.models import Profile
         from roomerApi.models import Message
+        from roomerApi.models import Notification
         from django.forms.models import model_to_dict
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
@@ -29,6 +30,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                                                recipient=recipient_profile, text=message,
                                                date_time=datetime.datetime.now())
         message_model.save()
+        notification_model = Notification.objects.create(message=Message.objects.get(id=message_model.id))
+        notification_model.save()
         dict_obj = model_to_dict(message_model)
         serialized = json.dumps(dict_obj)
         await self.channel_layer.group_send(

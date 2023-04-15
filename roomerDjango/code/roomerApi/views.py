@@ -1,4 +1,5 @@
 from rest_framework import permissions, viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 import datetime
@@ -181,8 +182,36 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = models.Notification.objects.all()
+    serializer_class = serializers.NotificationSerializer
+
+    def filter_queryset(self, queryset):
+        user_id = self.request.query_params.get('user_id')
+        if user_id is not None:
+            notification = list(queryset.filter(message__recipient_id=user_id).all())
+            queryset.filter(message__recipient_id=user_id).delete()
+            return notification
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 class ChatsViewSet(viewsets.ModelViewSet):
     queryset = models.Message.objects.all()
+
+    @action(methods=['put'], detail=True, permission_classes=[permissions.IsAuthenticated])
+    def mark_checked(self, request, pk=None):
+        message = self.queryset.filter(id=pk)[0]
+        if message:
+            data = {"is_checked": True}
+            serializer = self.get_serializer(message, data=data, partial=True)
+            models.Notification.objects.filter(message_id=pk).delete()
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
