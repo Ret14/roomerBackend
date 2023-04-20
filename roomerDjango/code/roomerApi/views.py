@@ -206,6 +206,38 @@ class NotificationViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+class FavouritesViewSet(viewsets.ModelViewSet):
+    queryset = models.Favourite.objects.all()
+    serializer_class = serializers.FavouritesSerializer
+
+    def filter_queryset(self, queryset):
+        user_id = self.request.query_params.get('user_id')
+        if user_id is not None:
+            queryset = queryset.filter(user_id=user_id)
+            return queryset
+        return queryset.none()
+
+    def create(self, request, *args, **kwargs):
+        user_id = self.request.query_params.get('user_id')
+        housing_id = self.request.query_params.get('housing_id')
+        if (user_id is not None) & (housing_id is not None):
+            user = models.Profile.objects.get(id=user_id)
+            housing = models.Housing.objects.get(id=housing_id)
+            if (user is not None) & (housing is not None):
+                models.Favourite.objects.create(user=user, housing=housing)
+                return Response(status.HTTP_201_CREATED)
+        return Response(status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id = None):
+        if id is not None:
+            favourite = models.Favourite.objects.get(id=id)
+            if favourite is not None:
+                favourite.delete()
+                return Response(status.HTTP_200_OK)
+            else:
+                return Response(status.HTTP_404_NOT_FOUND)
+        return Response(status.HTTP_400_BAD_REQUEST)
+
 class ChatsViewSet(viewsets.ModelViewSet):
     queryset = models.Message.objects.all()
 

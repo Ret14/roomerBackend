@@ -85,3 +85,12 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Notification
         fields = ['id', 'message']
+
+
+class FavouritesSerializer(serializers.ModelSerializer):
+    user = ProfileSerializer()
+    housing = HousingSerializer()
+
+    class Meta:
+        model = models.Favourite
+        fields = ['id', 'user', 'housing']
