@@ -229,9 +229,10 @@ class FavouritesViewSet(viewsets.ModelViewSet):
         return Response(status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
-        id = request.query_params.get('fav_id')
-        if id is not None:
-            favourite = models.Favourite.objects.get(housing_id=id)
+        housing_id = request.query_params.get('housing_id')
+        user_id = request.query_params.get('user_id')
+        if (housing_id is not None) & (user_id is not None):
+            favourite = models.Favourite.objects.get(Q(housing_id=housing_id) & Q(user_id=user_id))
             if favourite is not None:
                 favourite.delete()
                 return Response(status.HTTP_200_OK)
