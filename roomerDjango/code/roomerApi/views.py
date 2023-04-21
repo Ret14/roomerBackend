@@ -228,15 +228,15 @@ class FavouritesViewSet(viewsets.ModelViewSet):
                 return Response(status.HTTP_201_CREATED)
         return Response(status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, id = None):
+    def delete(self, request):
+        id = request.query_params.get('fav_id')
         if id is not None:
-            favourite = models.Favourite.objects.get(id=id).first()
+            favourite = models.Favourite.objects.get(housing_id=id)
             if favourite is not None:
                 favourite.delete()
                 return Response(status.HTTP_200_OK)
-            else:
-                return Response(status.HTTP_404_NOT_FOUND)
         return Response(status.HTTP_400_BAD_REQUEST)
+
 
 class ChatsViewSet(viewsets.ModelViewSet):
     queryset = models.Message.objects.all()
