@@ -230,7 +230,7 @@ class FavouritesViewSet(viewsets.ModelViewSet):
 
     def delete(self, request, id = None):
         if id is not None:
-            favourite = models.Favourite.objects.get(id=id)
+            favourite = models.Favourite.objects.get(id=id).first()
             if favourite is not None:
                 favourite.delete()
                 return Response(status.HTTP_200_OK)
