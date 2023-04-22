@@ -212,9 +212,18 @@ class FavouritesViewSet(viewsets.ModelViewSet):
 
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
         if user_id is not None:
-            queryset = queryset.filter(user_id=user_id)
-            return queryset
+            return queryset.filter(user_id=user_id)[offset:offset+limit]
         return queryset.none()
 
     def create(self, request, *args, **kwargs):
