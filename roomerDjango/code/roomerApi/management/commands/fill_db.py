@@ -29,7 +29,7 @@ class Command(BaseCommand):
             self.create_profiles(ratio)
             # self.create_messages(ratio)
             self.create_housings(ratio)
-            self.create_favourites(10)
+            self.create_favourites(30)
         except Exception:
             # models.Profile.objects.all().delete()
             models.Interest.objects.all().delete()
