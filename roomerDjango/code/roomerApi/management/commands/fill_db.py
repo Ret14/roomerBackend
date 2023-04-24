@@ -169,9 +169,6 @@ class Command(BaseCommand):
             models.Housing.file_content.through.objects.bulk_create(photo_to_housing_links)
             photo_to_housing_links.clear()
 
-
-
-
     def create_favourites(self, amount):
         user = models.Profile.objects.get(username='max_user_0')
         housing = list(models.Housing.objects.all()[0:amount])
@@ -181,4 +178,3 @@ class Command(BaseCommand):
                 housing=housing[number]
             ) for number in range(amount)]
         models.Favourite.objects.bulk_create(favourites)
-
