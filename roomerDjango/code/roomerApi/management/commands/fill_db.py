@@ -30,6 +30,7 @@ class Command(BaseCommand):
             self.create_profiles(ratio)
             # self.create_messages(ratio)
             self.create_housings(ratio)
+            self.create_favourites(100)
         except Exception:
             # models.Profile.objects.all().delete()
             models.Interest.objects.all().delete()
@@ -154,7 +155,6 @@ class Command(BaseCommand):
                            location=' '.join(self.fake.location_on_land())
                            )
             for number in range(amount)]
-
         models.Housing.objects.bulk_create(housings)
 
         housing_ids = list(models.Housing.objects.values_list('id', flat=True))
@@ -169,5 +169,12 @@ class Command(BaseCommand):
             models.Housing.file_content.through.objects.bulk_create(photo_to_housing_links)
             photo_to_housing_links.clear()
 
-
-
+    def create_favourites(self, amount):
+        user = models.Profile.objects.get(username='max_user_0')
+        housing = list(models.Housing.objects.all()[0:amount])
+        favourites = [
+            models.Favourite(
+                user=user,
+                housing=housing[number]
+            ) for number in range(amount)]
+        models.Favourite.objects.bulk_create(favourites)

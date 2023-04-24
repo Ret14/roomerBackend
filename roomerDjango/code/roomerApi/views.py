@@ -206,6 +206,48 @@ class NotificationViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+class FavouritesViewSet(viewsets.ModelViewSet):
+    queryset = models.Favourite.objects.all()
+    serializer_class = serializers.FavouritesSerializer
+
+    def filter_queryset(self, queryset):
+        user_id = self.request.query_params.get('user_id')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
+        if user_id is not None:
+            return queryset.filter(user_id=user_id)[offset:offset+limit]
+        return queryset.none()
+
+    def create(self, request, *args, **kwargs):
+        user_id = self.request.query_params.get('user_id')
+        housing_id = self.request.query_params.get('housing_id')
+        if (user_id is not None) & (housing_id is not None):
+            user = models.Profile.objects.get(id=user_id)
+            housing = models.Housing.objects.get(id=housing_id)
+            if (user is not None) & (housing is not None):
+                models.Favourite.objects.create(user=user, housing=housing)
+                return Response(status.HTTP_201_CREATED)
+        return Response(status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        housing_id = request.query_params.get('housing_id')
+        user_id = request.query_params.get('user_id')
+        if (housing_id is not None) & (user_id is not None):
+            favourite = models.Favourite.objects.get(Q(housing_id=housing_id) & Q(user_id=user_id))
+            if favourite is not None:
+                favourite.delete()
+                return Response(status.HTTP_200_OK)
+        return Response(status.HTTP_400_BAD_REQUEST)
+
+
 class ChatsViewSet(viewsets.ModelViewSet):
     queryset = models.Message.objects.all()
 

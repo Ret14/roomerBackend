@@ -74,3 +74,8 @@ class Message(models.Model):
 class Notification(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     created = models.DateField(auto_now=True)
+
+
+class Favourite(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    housing = models.ForeignKey(Housing, on_delete=models.CASCADE)
