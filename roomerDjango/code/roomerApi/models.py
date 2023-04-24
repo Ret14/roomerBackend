@@ -34,7 +34,7 @@ class Profile(AbstractUser):
 
 
 class HousingPhoto(models.Model):
-    photo = models.FileField(upload_to='housing/%Y/%m/%d/')
+    photo = models.FileField(upload_to='housing/%Y/%m/%d/', default='housing/flat_default.jpeg')
 
 
 class Housing(models.Model):
