@@ -26,6 +26,7 @@ class Command(BaseCommand):
         try:
             self.create_interests(30)
             self.create_cities()
+            self.create_housing_photo()
             self.create_profiles(ratio)
             # self.create_messages(ratio)
             self.create_housings(ratio)
@@ -40,6 +41,9 @@ class Command(BaseCommand):
     def create_random_string(self, a, b):
         return ''.join(self.fake.random_elements(elements=self.random_char_set,
                                                  length=random.randint(a, b)))
+
+    def create_housing_photo(self):
+        models.HousingPhoto().save()
 
     def create_interests(self, amount):
         interests = self.fake.words(nb=amount, unique=True)
@@ -152,3 +156,18 @@ class Command(BaseCommand):
             for number in range(amount)]
 
         models.Housing.objects.bulk_create(housings)
+
+        housing_ids = list(models.Housing.objects.values_list('id', flat=True))
+        housing_photo_id = models.HousingPhoto.objects.first().id
+
+        photo_to_housing_links = []
+
+        for housing_id in housing_ids:
+            photo_housing = models.Housing.file_content.through(housing_id=housing_id, housingphoto_id=housing_photo_id)
+            photo_to_housing_links.append(photo_housing)
+
+            models.Housing.file_content.through.objects.bulk_create(photo_to_housing_links)
+            photo_to_housing_links.clear()
+
+
+
