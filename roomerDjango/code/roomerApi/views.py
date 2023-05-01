@@ -1,7 +1,6 @@
 from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 import datetime
 from roomerApi import serializers
 from roomerApi import models
@@ -288,3 +287,54 @@ class ChatsViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class FollowerViewSet(viewsets.ModelViewSet):
+    queryset = models.Follower.objects.all()
+    serializer_class = serializers.FollowersSerializer
+
+    def filter_queryset(self, queryset):
+        user_id = self.request.query_params.get('user_id')
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
+        if user_id is not None:
+            return queryset.filter(user_id=user_id)[offset:offset+limit]
+        return queryset.none()
+
+    def create(self, request, *args, **kwargs):
+        user_id = request.query_params.get('user_id')
+        follow_id = request.query_params.get('follow_id')
+
+        if (user_id is not None) and (follow_id is not None):
+            user = models.Profile.objects.get(id=user_id)
+            follow = models.Profile.objects.get(id=follow_id)
+
+            if (user is not None) and (follow is not None):
+                models.Follower.objects.create(user_id=user.id, following_id=follow_id)
+                return Response(status.HTTP_201_CREATED)
+            return Response(status.HTTP_404_NOT_FOUND)
+        return Response(status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        user_id = request.query_params.get('user_id')
+        follow_id = request.query_params.get('follow_id')
+
+        if (user_id is not None) and (follow_id is not None):
+            user = models.Profile.objects.get(id=user_id)
+            follow = models.Profile.objects.get(id=follow_id)
+
+            if (user is not None) and (follow is not None):
+                follow_record = models.Follower.objects.get(user_id=user.id, following_id=follow_id)
+                if follow_record is not None:
+                    follow_record.delete()
+                    return Response(status.HTTP_200_OK)
+                return Response(status.HTTP_404_NOT_FOUND)
+        return Response(status.HTTP_400_BAD_REQUEST)

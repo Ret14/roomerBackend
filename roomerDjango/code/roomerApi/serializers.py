@@ -29,7 +29,7 @@ class RoomAttributeSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Review
-        fields = ['score', 'author', 'user', 'comment', ]
+        fields = ['id', 'score', 'user', 'comment', 'is_anon']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -93,4 +93,12 @@ class FavouritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Favourite
         fields = ['id', 'housing']
+
+
+class FollowersSerializer(serializers.ModelSerializer):
+    following = ProfileSerializer()
+
+    class Meta:
+        model = models.Follower
+        fields = ['id', 'following']
 

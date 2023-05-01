@@ -79,3 +79,10 @@ class Notification(models.Model):
 class Favourite(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     housing = models.ForeignKey(Housing, on_delete=models.CASCADE)
+
+
+class Follower(models.Model):
+    class Meta:
+        unique_together = ("user", "following")
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user')
+    following = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following')
