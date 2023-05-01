@@ -2,7 +2,7 @@ import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.core.serializers import serialize
-
+from rest_framework.renderers import JSONRenderer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -33,7 +33,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = Message.objects.get(id=message_model.id)
         notification_model = Notification.objects.create(message=message)
         notification_model.save()
-        serialized = serialize('json', ChatsSerializer(message).data)
+        serializer = ChatsSerializer(message)
+        serialized = JSONRenderer().render(serializer)
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat_message", "message": serialized}
         )
