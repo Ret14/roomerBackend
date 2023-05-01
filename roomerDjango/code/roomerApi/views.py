@@ -249,7 +249,7 @@ class FavouritesViewSet(viewsets.ModelViewSet):
 
 
 class ChatsViewSet(viewsets.ModelViewSet):
-    queryset = models.Message.objects.all()
+    queryset = models.Message.objects.order_by('-id').all()
 
     @action(methods=['put'], detail=True, permission_classes=[permissions.IsAuthenticated])
     def mark_checked(self, request, pk=None):
