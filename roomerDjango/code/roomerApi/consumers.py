@@ -32,8 +32,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_model.save()
         notification_model = Notification.objects.create(message=Message.objects.get(id=message_model.id))
         notification_model.save()
-        dict_obj = model_to_dict(message_model)
-        serialized = json.dumps(dict_obj)
+        serialized = json.dumps(message_model.__dict__)
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat_message", "message": serialized}
         )
