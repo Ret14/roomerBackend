@@ -41,5 +41,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def chat_message(self, event):
         message = event["message"]
-        print(message)
         await self.send(text_data=message.decode())
