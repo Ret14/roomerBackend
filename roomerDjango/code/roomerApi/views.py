@@ -292,6 +292,7 @@ class ChatsViewSet(viewsets.ModelViewSet):
 class FollowerViewSet(viewsets.ModelViewSet):
     queryset = models.Follower.objects.all()
     serializer_class = serializers.FollowersSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')

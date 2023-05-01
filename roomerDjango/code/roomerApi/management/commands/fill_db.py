@@ -31,12 +31,10 @@ class Command(BaseCommand):
             # self.create_messages(ratio)
             self.create_housings(ratio)
             self.create_favourites(100)
+            self.follow_users()
         except Exception:
-            # models.Profile.objects.all().delete()
             models.Interest.objects.all().delete()
-            # models.Review.objects.all().delete()
             models.Housing.objects.all().delete()
-            # models.RoomAttribute.objects.all().delete()
             traceback.print_exc()
 
     def create_random_string(self, a, b):
@@ -183,3 +181,12 @@ class Command(BaseCommand):
                 housing=housing[number]
             ) for number in range(amount)]
         models.Favourite.objects.bulk_create(favourites)
+
+    def follow_users(self):
+        names = ('max_', 'rodion_', 'nika_', 'andrew_')
+        for name in names:
+            profile_ids = list(models.Profile.objects.filter(username__startswith=name).values_list('id', flat=True))
+            for user_id in profile_ids:
+                for follow_id in profile_ids:
+                    if follow_id != user_id:
+                        models.Follower(user_id=user_id, following_id=follow_id).save()
