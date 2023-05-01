@@ -44,7 +44,8 @@ class Command(BaseCommand):
                                                  length=random.randint(a, b)))
 
     def create_housing_photo(self):
-        models.HousingPhoto().save()
+        for i in range(5):
+            models.HousingPhoto(photo=f'housing/flat_default_{i}.jpg').save()
 
     def create_interests(self, amount):
         interests = self.fake.words(nb=amount, unique=True)
@@ -101,7 +102,8 @@ class Command(BaseCommand):
                            sleep_time=random.choice(sleep_time_choices),
                            personality_type=random.choice(personality_choices),
                            clean_habits=random.choice(clean_choices),
-                           birth_date=self.fake.date_between()
+                           birth_date=self.fake.date_between(),
+                           avatar=f'avatar/default_{random.randint(0, 4)}.jpg'
                            )
             for _ in range(amount)]
 
@@ -125,6 +127,7 @@ class Command(BaseCommand):
                     sleep_time=random.choice(sleep_time_choices),
                     personality_type=random.choice(personality_choices),
                     clean_habits=random.choice(clean_choices),
+                    avatar=f'avatar/default_{random.randint(0, 4)}.jpg'
                 )
         interests_ids = list(models.Interest.objects.values_list('id', flat=True))
         profile_ids = list(models.Profile.objects.values_list('id', flat=True))
@@ -158,16 +161,18 @@ class Command(BaseCommand):
         models.Housing.objects.bulk_create(housings)
 
         housing_ids = list(models.Housing.objects.values_list('id', flat=True))
-        housing_photo_id = models.HousingPhoto.objects.first().id
+        housing_photo_id = list(models.HousingPhoto.objects.values_list('id', flat=True))
 
         photo_to_housing_links = []
+        for h_id in housing_ids:
+            housing_photos = random.sample(housing_photo_id, random.randint(1, 4))
+            for photo_id in housing_photos:
+                photo_housing = models.Housing.file_content.through(housing_id=h_id, housingphoto_id=photo_id)
+                photo_to_housing_links.append(photo_housing)
 
-        for housing_id in housing_ids:
-            photo_housing = models.Housing.file_content.through(housing_id=housing_id, housingphoto_id=housing_photo_id)
-            photo_to_housing_links.append(photo_housing)
+        models.Housing.file_content.through.objects.bulk_create(photo_to_housing_links)
 
-            models.Housing.file_content.through.objects.bulk_create(photo_to_housing_links)
-            photo_to_housing_links.clear()
+        photo_to_housing_links.clear()
 
     def create_favourites(self, amount):
         user = models.Profile.objects.get(username='max_user_0')
