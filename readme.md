@@ -10,6 +10,7 @@
 | 1.6    	 | 03.04.2023 	 |                                                                              Обновил некоторые примеры запросов и ответов                                                                              |                                                            
 | 1.7    	 | 08.04.2023 	 |                                                                            Добавил запрос для пометки прочитанных сообщений                                                                            |                                                            
 | 1.8    	 | 15.04.2023 	 |                                                                                   Добавил город в некоторые запросы                                                                                    |                                                            
+| 1.9    	 | 01.05.2023 	 |                                                                                Добавил запросы для работы с подписками                                                                                 |                                                            
 
 [Аккаунты для тестирования](accounts.md)
 
@@ -576,4 +577,156 @@ file_content - фотографии помещения. host - id пользов
             "city": "Новосибирск"
         },
         ...
+    ]
+### Подписка на пользователя
+#### Комментарий:
+user_id - id текущего пользователя,
+follow_id - id пользователя, на которого делается подписка
+#### Примеры запросов
+#### Запрос:
+    curl -X POST \
+        http://176.113.83.93:8000/follow/?user_id=304&follow_id=3 \
+        -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+
+#### Ответ:
+    Response code: 201
+    Response body:
+    {}
+
+### Отписка от пользователя
+#### Комментарий:
+user_id - id текущего пользователя,
+follow_id - id пользователя, на которого делается подписка
+#### Примеры запросов
+#### Запрос:
+    curl -X DELETE \
+        http://176.113.83.93:8000/follow/?user_id=304&follow_id=3 \
+        -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+
+#### Ответ:
+    Response code: 201
+    Response body:
+    {}
+
+### Получение списка пользователей, на которых подписан текущий пользователь
+#### Комментарий:
+user_id - id текущего пользователя,
+#### Примеры запросов
+#### Запрос:
+    curl -X GET \
+        http://176.113.83.93:8000/follow/?user_id=304 \
+        -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+
+#### Ответ:
+    Response code: 201
+    Response body:
+    [
+    {
+        {"id": 1,
+        "following": {
+            "id": 1,
+            "first_name": "Barbara",
+            "last_name": "Roberts",
+            "birth_date": "2006-12-31",
+            "sex": "M",
+            "avatar": "http://0.0.0.0:8000/media/avatar/default_0.jpg",
+            "email": "kyleblair@example.net",
+            "about_me": "Almost wonder employee attorney. Theory type successful together.\nStudy modern miss dog Democrat quickly. Often late produce you true soldier. Food break onto friend.\nAdministration even relate head color. Staff beyond chair recently and off.\nQuite ago play paper office hospital have wonder. Painting create wife. Look road article quickly.\nPer structure attorney author feeling job. Mean always beyond write. Employee toward like total now.\nSmall citizen class morning. Others kind company likely.\nThemselves true power home price check real. Score from animal exactly drive well good. Pull opportunity throughout take car.\nSecurity stock ball organization recognize civil. Pm her then nothing increase.",
+            "city": "Владикавказ",
+            "employment": "S",
+            "alcohol_attitude": "P",
+            "smoking_attitude": "P",
+            "sleep_time": "O",
+            "personality_type": "M",
+            "clean_habits": "D",
+            "interests": [
+                {
+                    "id": 7,
+                    "interest": "event"
+                },
+                {
+                    "id": 11,
+                    "interest": "why"
+                },
+                {
+                    "id": 12,
+                    "interest": "step"
+                },
+                {
+                    "id": 20,
+                    "interest": "discover"
+                },
+                {
+                    "id": 23,
+                    "interest": "father"
+                },
+                {
+                    "id": 24,
+                    "interest": "challenge"
+                }
+            ]
+        }
+    },
+    {
+        "id": 2,
+        "following": {
+            "id": 2,
+            "first_name": "Monica",
+            "last_name": "Thompson",
+            "birth_date": "2004-02-27",
+            "sex": "M",
+            "avatar": "http://0.0.0.0:8000/media/avatar/default_4.jpg",
+            "email": "nstewart@example.org",
+            "about_me": "Fact catch even front happen behavior single along. Clearly word face house nature. Boy room value film tax.\nIdea foreign increase between training. Front something speech buy break marriage also.\nTurn phone heart window. Assume be seek article. Better news face.\nResearch describe base detail yourself one coach court. Ask tell reduce total. Sell cut market either political young something.",
+            "city": "Тольятти",
+            "employment": "NE",
+            "alcohol_attitude": "I",
+            "smoking_attitude": "P",
+            "sleep_time": "N",
+            "personality_type": "I",
+            "clean_habits": "D",
+            "interests": [
+                {
+                    "id": 10,
+                    "interest": "interview"
+                },
+                {
+                    "id": 11,
+                    "interest": "why"
+                },
+                {
+                    "id": 12,
+                    "interest": "step"
+                },
+                {
+                    "id": 15,
+                    "interest": "me"
+                },
+                {
+                    "id": 16,
+                    "interest": "help"
+                },
+                {
+                    "id": 18,
+                    "interest": "wait"
+                },
+                {
+                    "id": 20,
+                    "interest": "discover"
+                },
+                {
+                    "id": 22,
+                    "interest": "chair"
+                },
+                {
+                    "id": 23,
+                    "interest": "father"
+                },
+                {
+                    "id": 28,
+                    "interest": "successful"
+                }
+            ]
+        }
+    }
     ]
