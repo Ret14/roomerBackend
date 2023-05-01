@@ -20,7 +20,7 @@ class Profile(AbstractUser):
     birth_date = models.DateField(default='2022-01-30')
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
     sex = models.CharField(choices=utils.sex_field_choices, max_length=1, default='M')
-    avatar = models.ImageField(default='avatar/default.jpg', upload_to='avatar/%Y/%m/%d/')
+    avatar = models.ImageField(default='avatar/default_0.jpg', upload_to='avatar/%Y/%m/%d/')
     about_me = models.CharField(max_length=1000, default='I\'m good')
     employment = models.CharField(choices=utils.employment_choices, max_length=3, default='E')
     alcohol_attitude = models.CharField(choices=utils.attitude_choices, max_length=1, default='N')
@@ -34,7 +34,7 @@ class Profile(AbstractUser):
 
 
 class HousingPhoto(models.Model):
-    photo = models.FileField(upload_to='housing/%Y/%m/%d/', default='housing/flat_default.jpeg')
+    photo = models.FileField(upload_to='housing/%Y/%m/%d/', default='housing/flat_default_0.jpg')
 
 
 class Housing(models.Model):
