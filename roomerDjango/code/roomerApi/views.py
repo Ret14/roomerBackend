@@ -10,6 +10,7 @@ from django.db.models import Q
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = models.Profile.objects.all()
+    pagination_class = None
 
     @staticmethod
     def get_birth_date_from_age(age: int):
@@ -93,6 +94,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 class InterestsViewSet(viewsets.ModelViewSet):
     queryset = models.Interest.objects.all()[:20]
+    pagination_class = None
     serializer_class = serializers.InterestSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -100,17 +102,20 @@ class InterestsViewSet(viewsets.ModelViewSet):
 class CitiesViewSet(viewsets.ModelViewSet):
     queryset = models.City.objects.all()
     serializer_class = serializers.CitySerializer
+    pagination_class = None
     permission_classes = [permissions.AllowAny]
 
 
 class RoomAttributeViewSet(viewsets.ModelViewSet):
     queryset = models.RoomAttribute.objects.all()
     serializer_class = serializers.RoomAttributeSerializer
+    pagination_class = None
     permission_classes = [permissions.AllowAny]
 
 
 class HousingViewSet(viewsets.ModelViewSet):
     queryset = models.Housing.objects.all()
+    pagination_class = None
 
     def filter_queryset(self, queryset):
         month_price_from = self.request.query_params.get('month_price_from')
@@ -188,12 +193,14 @@ class HousingViewSet(viewsets.ModelViewSet):
 
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
+    pagination_class = None
     serializer_class = serializers.ReviewSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = models.Notification.objects.all()
+    pagination_class = None
     serializer_class = serializers.NotificationSerializer
 
     def filter_queryset(self, queryset):
@@ -212,18 +219,8 @@ class FavouritesViewSet(viewsets.ModelViewSet):
 
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
-        offset = self.request.query_params.get('offset')
-        limit = self.request.query_params.get('limit')
-        try:
-            offset = int(offset)
-        except Exception:
-            offset = 0
-        try:
-            limit = int(limit)
-        except Exception:
-            limit = 20
         if user_id is not None:
-            return queryset.filter(user_id=user_id)[offset:offset+limit]
+            return queryset.filter(user_id=user_id)
         return queryset.none()
 
     def create(self, request, *args, **kwargs):
@@ -268,23 +265,13 @@ class ChatsViewSet(viewsets.ModelViewSet):
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         chat_id = self.request.query_params.get('chat_id')
-        offset = self.request.query_params.get('offset')
-        limit = self.request.query_params.get('limit')
-        try:
-            offset = int(offset)
-        except Exception:
-            offset = 0
-        try:
-            limit = int(limit)
-        except Exception:
-            limit = 20
         if user_id is not None:
             if chat_id != "":
                 queryset = queryset.filter(chat_id=chat_id)
             else:
                 queryset = queryset.filter(Q(donor_id=user_id) | Q(recipient_id=user_id)).order_by("chat_id").distinct(
                     "chat_id")
-        return queryset[offset:offset + limit]
+        return queryset
 
     serializer_class = serializers.ChatsSerializer
     permission_classes = [permissions.AllowAny]
