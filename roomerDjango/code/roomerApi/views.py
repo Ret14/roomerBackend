@@ -112,6 +112,7 @@ class HousingViewSet(viewsets.ModelViewSet):
     queryset = models.Housing.objects.all()
 
     def filter_queryset(self, queryset):
+        params = self.request.query_params
         month_price_from = self.request.query_params.get('month_price_from')
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
@@ -151,6 +152,10 @@ class HousingViewSet(viewsets.ModelViewSet):
         sharing_type = self.request.query_params.get('sharing_type')
         if sharing_type is not None:
             queryset = queryset.filter(sharing_type=sharing_type)
+
+        if 'host_id' in params:
+            queryset = queryset.filter(host_id=params['host_id'])
+
 
         return queryset[offset:offset + limit]
 
