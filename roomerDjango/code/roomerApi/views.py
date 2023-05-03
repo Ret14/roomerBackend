@@ -181,6 +181,67 @@ class HousingViewSet(viewsets.ModelViewSet):
                 return Response(context, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, *args, **kwargs):
+        mutable_data = request.data.copy()
+        # housing_id = mutable_data.pop('id')[0]
+        host_id = mutable_data.pop('host')[0]
+        if 'id' in mutable_data:
+            files = request.FILES.getlist('file_content')
+            if files:
+                mutable_data.pop('file_content')
+                serializer = serializers.HousingSerializer(data=mutable_data)
+                if serializer.is_valid():
+                    serializer.save(host_id=host_id)
+                    housing_record = models.Housing.objects.get(id=serializer.data['id'])
+                    uploaded_files = []
+                    for file in files:
+                        content = models.HousingPhoto.objects.create(photo=file)
+                        uploaded_files.append(content)
+                    housing_record.file_content.add(*uploaded_files)
+                    context = serializer.data
+                    context["file_content"] = [file.id for file in uploaded_files]
+                    return Response(context, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                serializer = serializers.HousingSerializer(data=mutable_data)
+                if serializer.is_valid():
+                    serializer.save(host_id=host_id)
+                    context = serializer.data
+                    return Response(context, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['put'], detail=True, permission_classes=[permissions.IsAuthenticated])
+    def update_room(self, request, pk=None):
+        mutable_data = request.data.copy()
+        # housing_id = mutable_data.pop('id')[0]
+        host_id = mutable_data.pop('host')[0]
+        if 'id' in mutable_data:
+            files = request.FILES.getlist('file_content')
+            if files:
+                mutable_data.pop('file_content')
+                serializer = serializers.HousingSerializer(data=mutable_data)
+                if serializer.is_valid():
+                    serializer.update(host_id=host_id)
+                    housing_record = models.Housing.objects.get(id=serializer.data['id'])
+                    uploaded_files = []
+                    for file in files:
+                        content = models.HousingPhoto.objects.create(photo=file)
+                        uploaded_files.append(content)
+                    housing_record.file_content.add(*uploaded_files)
+                    context = serializer.data
+                    context["file_content"] = [file.id for file in uploaded_files]
+                    return Response(context, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                serializer = serializers.HousingSerializer(data=mutable_data)
+                if serializer.is_valid():
+                    serializer.update(host_id=host_id)
+                    context = serializer.data
+                    return Response(context, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     serializer_class = serializers.HousingSerializer
     permission_classes = [permissions.AllowAny]
 
