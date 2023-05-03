@@ -102,6 +102,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'roomerApi.pagination.CustomPageNumber',
+    'PAGE_SIZE': 100
 }
 
 DJOSER = {
