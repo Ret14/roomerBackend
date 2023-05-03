@@ -2,7 +2,7 @@ import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.core.serializers import serialize
-
+from rest_framework.renderers import JSONRenderer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -19,7 +19,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         from roomerApi.models import Profile
         from roomerApi.models import Message
         from roomerApi.models import Notification
-        from django.forms.models import model_to_dict
+        from roomerApi.serializers import ChatsSerializer
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         donor_id = text_data_json["donor_id"]
@@ -30,13 +30,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                                                recipient=recipient_profile, text=message,
                                                date_time=datetime.datetime.now())
         message_model.save()
-        notification_model = Notification.objects.create(message=Message.objects.get(id=message_model.id))
+        message = Message.objects.get(id=message_model.id)
+        notification_model = Notification.objects.create(message=message)
         notification_model.save()
-        serialized = json.dumps(message_model.__dict__)
+        serializer = ChatsSerializer(message)
+        serialized = JSONRenderer().render(serializer.data)
         await self.channel_layer.group_send(
             self.room_group_name, {"type": "chat_message", "message": serialized}
         )
 
     async def chat_message(self, event):
         message = event["message"]
-        await self.send(text_data=message)
+        await self.send(text_data=message.decode())
