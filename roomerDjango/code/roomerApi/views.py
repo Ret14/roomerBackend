@@ -162,13 +162,19 @@ class HousingViewSet(viewsets.ModelViewSet):
         if 'host_id' in params:
             queryset = queryset.filter(host_id=params['host_id'])
 
-
         return queryset[offset:offset + limit]
 
     def create(self, request, *args, **kwargs):
         files = request.FILES.getlist('file_content')
         mutable_data = request.data.copy()
-        host_id = mutable_data.pop('host')[0]
+        host = mutable_data.pop('host')
+        host_id = -1
+        if type(host) is list:
+            host_id = host[0]
+        elif type(host) is int:
+            host_id = host
+        elif type(host) is str:
+            host_id = int(host)
         if files:
             mutable_data.pop('file_content')
             serializer = serializers.HousingSerializer(data=mutable_data)
