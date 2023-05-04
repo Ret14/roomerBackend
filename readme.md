@@ -11,6 +11,7 @@
 | 1.7    	 | 08.04.2023 	 |                                                                            Добавил запрос для пометки прочитанных сообщений                                                                            |                                                            
 | 1.8    	 | 15.04.2023 	 |                                                                                   Добавил город в некоторые запросы                                                                                    |                                                            
 | 1.9    	 | 01.05.2023 	 |                                                                                Добавил запросы для работы с подписками                                                                                 |                                                            
+| 2.0    	 | 02.05.2023 	 |                                                                              Добавил запрос объявлений, созданных юзером                                                                               |                                                            
 
 [Аккаунты для тестирования](accounts.md)
 
@@ -729,4 +730,103 @@ user_id - id текущего пользователя,
             ]
         }
     }
+    ]
+
+### Получение списка объявлений, созданных текущим пользователем
+#### Комментарий:
+host_id - id текущего пользователя,
+#### Примеры запросов
+#### Запрос:
+    curl -X GET \
+        http://176.113.83.93:8000/housing/?host_id=1 \
+        -H 'Authorization: Token b704c9fc3655635646356ac2950269f352ea1139'
+
+#### Ответ:
+    Response code: 201
+    [
+        {
+            "id": 8,
+            "month_price": 31264,
+            "host": {
+                "id": 1,
+                "first_name": "Erika",
+                "last_name": "Anderson",
+                "birth_date": "2007-01-01",
+                "sex": "F",
+                "avatar": "http://0.0.0.0:8000/media/avatar/default_0.jpg",
+                "email": "kyleblair@example.net",
+                "about_me": "Successful together type. Raise study modern miss dog Democrat quickly.\nEvery manage political record word group food break. Picture suddenly drug rule bring determine some forward. Beyond chair recently and.\nOwn available buy country store build before. Already against which continue. Look road article quickly.\nPer structure attorney author feeling job. Mean always beyond write. Employee toward like total now.\nSmall citizen class morning. Others kind company likely.\nThemselves true power home price check real. Score from animal exactly drive well good. Pull opportunity throughout take car.\nSecurity stock ball organization recognize civil. Pm her then nothing increase.",
+                "city": "Тула",
+                "employment": "NE",
+                "alcohol_attitude": "N",
+                "smoking_attitude": "I",
+                "sleep_time": "D",
+                "personality_type": "I",
+                "clean_habits": "C",
+                "interests": [
+                    {
+                        "id": 1,
+                        "interest": "three"
+                    },
+                    {
+                        "id": 2,
+                        "interest": "image"
+                    },
+                    {
+                        "id": 5,
+                        "interest": "kitchen"
+                    },
+                    {
+                        "id": 7,
+                        "interest": "event"
+                    },
+                    {
+                        "id": 10,
+                        "interest": "interview"
+                    },
+                    {
+                        "id": 11,
+                        "interest": "why"
+                    },
+                    {
+                        "id": 12,
+                        "interest": "step"
+                    },
+                    {
+                        "id": 21,
+                        "interest": "mother"
+                    },
+                    {
+                        "id": 22,
+                        "interest": "chair"
+                    },
+                    {
+                        "id": 23,
+                        "interest": "father"
+                    }
+                ]
+            },
+            "description": "Month relate do must industry.\nEvery his American card these employee. Including suggest ball interview threat impact.\nHot read power green let. Pull work according director join weight. Sit show memory.\nSomeone less future only million. Machine cultural mouth view step eight.\nBoth especially call owner church over. Nothing benefit situation operation treat ability so simply.\nWish international blue animal popular. Among policy fine together local play finally read. Indeed own by clearly course common.\nStyle explain structure economic film get floor prepare.\nBody study few remain nearly. Dream music person technology suffer wear success. Daughter rule see board.\nGuess enough main team. Up hundred value skill eight.\nSchool nothing generation factor hot scene. Land understand your account near. Be anyone their write question.\nLittle choice social. Lead fast ability nearly.",
+            "file_content": [
+                {
+                    "photo": "http://0.0.0.0:8000/media/housing/flat_default_0.jpg"
+                },
+                {
+                    "photo": "http://0.0.0.0:8000/media/housing/flat_default_1.jpg"
+                },
+                {
+                    "photo": "http://0.0.0.0:8000/media/housing/flat_default_2.jpg"
+                },
+                {
+                    "photo": "http://0.0.0.0:8000/media/housing/flat_default_3.jpg"
+                }
+            ],
+            "title": "Cold determine purpose history. Another special window forward.",
+            "location": "50.75767 -1.5443 Lymington GB Europe/London",
+            "bathrooms_count": 4,
+            "bedrooms_count": 3,
+            "housing_type": "DU",
+            "room_attributes": [],
+            "sharing_type": "P"
+        }
     ]
