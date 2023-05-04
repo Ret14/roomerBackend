@@ -222,7 +222,7 @@ class HousingViewSet(viewsets.ModelViewSet):
                 uploaded_files.append(content)
             instance.file_content.add(*uploaded_files)
 
-        ser = self.get_serializer(data=mutable_data, instance=instance)
+        ser = self.get_serializer(data=mutable_data, instance=instance, partial=True)
         if ser.is_valid():
             ser.save()
             return Response(ser.data, status=status.HTTP_200_OK)
