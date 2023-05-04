@@ -208,7 +208,8 @@ class HousingViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         mutable_data = request.data.copy()
-        mutable_data.pop('host')
+        if 'host' in mutable_data:
+            mutable_data.pop('host')
         files = request.FILES.getlist('file_content')
         if files:
             for photo in instance.file_content.all():
