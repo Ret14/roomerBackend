@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -197,6 +199,34 @@ class HousingViewSet(viewsets.ModelViewSet):
                 context = serializer.data
                 return Response(context, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        try:
+            instance = self.queryset.get(pk=pk)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        mutable_data = request.data.copy()
+        mutable_data.pop('host')
+        files = request.FILES.getlist('file_content')
+        if files:
+            for photo in instance.file_content.all():
+                photo.photo.delete()
+                photo.delete()
+            mutable_data.pop('file_content')
+            uploaded_files = []
+            for file in files:
+                content = models.HousingPhoto.objects.create(photo=file)
+                uploaded_files.append(content)
+            instance.file_content.add(*uploaded_files)
+
+        ser = self.get_serializer(data=mutable_data, instance=instance)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data, status=status.HTTP_200_OK)
+        else:
+            return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
     serializer_class = serializers.HousingSerializer
     permission_classes = [permissions.AllowAny]
