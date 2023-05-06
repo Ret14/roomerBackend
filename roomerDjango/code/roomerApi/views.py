@@ -229,6 +229,21 @@ class HousingViewSet(viewsets.ModelViewSet):
         else:
             return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        try:
+            instance = self.queryset.get(pk=pk)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        for photo in instance.file_content.all():
+            photo.photo.delete()
+            photo.delete()
+
+        instance.delete()
+
+        return Response(status=status.HTTP_200_OK)
+
     serializer_class = serializers.HousingSerializer
     permission_classes = [permissions.AllowAny]
 
