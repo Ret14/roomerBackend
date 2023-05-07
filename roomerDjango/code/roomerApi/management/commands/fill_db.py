@@ -104,8 +104,11 @@ class Command(BaseCommand):
                            avatar=f'avatar/default_{random.randint(0, 4)}.jpg'
                            )
             for _ in range(amount)]
+        step = 100
+        for i in range(0, amount, step):
+            x = i
+            models.Profile.objects.bulk_create(profiles[x:x + step])
 
-        models.Profile.objects.bulk_create(profiles)
         password = 'x2Q6$mUcn3'
         names = ('max', 'rodion', 'nika', 'andrew')
         for name in names:
@@ -156,7 +159,10 @@ class Command(BaseCommand):
                            location=' '.join(self.fake.location_on_land())
                            )
             for number in range(amount)]
-        models.Housing.objects.bulk_create(housings)
+        step = 100
+        for i in range(0, amount, step):
+            x = i
+            models.Housing.objects.bulk_create(housings[x:x + step])
 
         housing_ids = list(models.Housing.objects.values_list('id', flat=True))
         housing_photo_id = list(models.HousingPhoto.objects.values_list('id', flat=True))
