@@ -56,10 +56,11 @@ class Review(models.Model):
         unique_together = ("author", "user")
 
     score = models.IntegerField(choices=utils.amount_score_choices)
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='author_set')
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_set')
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='author')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user')
     comment = models.CharField(max_length=1000)
-    date_time = models.DateTimeField(auto_now=True)
+    date = models.DateField(auto_now=True)
+    is_anon = models.BooleanField(default=False)
 
 
 class Message(models.Model):

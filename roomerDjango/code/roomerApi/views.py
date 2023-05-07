@@ -252,7 +252,31 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     pagination_class = None
     serializer_class = serializers.ReviewSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def filter_queryset(self, queryset):
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
+
+        params = self.request.query_params
+        if 'user_id' in params:
+            queryset = queryset.filter(user_id=params['user_id'])
+
+        return queryset[offset:offset + limit]
+
+    def create(self, request, *args, **kwargs):
+        try:
+            instance = self.queryset.get(pk=pk)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
