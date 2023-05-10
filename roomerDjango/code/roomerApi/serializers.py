@@ -26,12 +26,6 @@ class RoomAttributeSerializer(serializers.ModelSerializer):
         fields = ['attribute']
 
 
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Review
-        fields = ['id', 'score', 'user', 'comment', 'is_anon']
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     interests = InterestSerializer(many=True, required=False)
     city = serializers.CharField(required=False, source='city.city')
@@ -56,6 +50,14 @@ class ProfileSerializer(serializers.ModelSerializer):
             instance.city = city_obj
 
         return super().update(instance, validated_data)
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    author = ProfileSerializer(required=False)
+
+    class Meta:
+        model = models.Review
+        fields = ['id', 'score', 'author', 'receiver', 'comment', 'is_anon']
 
 
 class HousingSerializer(serializers.ModelSerializer):

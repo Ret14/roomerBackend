@@ -6,7 +6,6 @@ from rest_framework.response import Response
 import datetime
 from roomerApi import serializers
 from roomerApi import models
-from roomerApi import pagination
 from django.db.models import Q
 
 
@@ -252,7 +251,63 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = models.Review.objects.all()
     pagination_class = None
     serializer_class = serializers.ReviewSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def filter_queryset(self, queryset):
+        offset = self.request.query_params.get('offset')
+        limit = self.request.query_params.get('limit')
+        try:
+            offset = int(offset)
+        except Exception:
+            offset = 0
+        try:
+            limit = int(limit)
+        except Exception:
+            limit = 20
+
+        params = self.request.query_params
+        if 'receiver_id' in params:
+            queryset = queryset.filter(receiver_id=params['receiver_id'])
+
+        return queryset[offset:offset + limit]
+
+    def create(self, request, *args, **kwargs):
+        mutable_data = request.data.copy()
+
+        receiver_id = mutable_data.pop('receiver_id')
+        author_id = mutable_data.pop('author_id')
+        if type(author_id) and type(receiver_id) is list:
+            receiver_id = receiver_id[0]
+            author_id = author_id[0]
+        elif type(author_id) and type(receiver_id) is str:
+            receiver_id = int(receiver_id)
+            author_id = int(author_id)
+
+        if (receiver_id is not None) and (author_id is not None):
+            try:
+                author = models.Profile.objects.get(pk=author_id)
+                receiver = models.Profile.objects.get(pk=receiver_id)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            mutable_data['receiver'] = receiver_id
+            ser = self.get_serializer(data=mutable_data)
+            if ser.is_valid():
+                ser.save(author_id=author_id)
+                return Response(status=status.HTTP_201_CREATED)
+            else:
+                return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        try:
+            instance = self.queryset.get(pk=pk)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        instance.delete()
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
