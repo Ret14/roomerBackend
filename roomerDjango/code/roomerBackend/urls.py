@@ -31,6 +31,7 @@ router.register(r'chats', views.ChatsViewSet)
 router.register(r'notifications', views.NotificationViewSet)
 router.register(r'favourites', views.FavouritesViewSet)
 router.register(r'follow', views.FollowerViewSet)
+router.register(r'review', views.ReviewViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),

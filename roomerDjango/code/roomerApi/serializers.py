@@ -57,7 +57,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Review
-        fields = ['score', 'author', 'user', 'comment', 'is_anon']
+        fields = ['id', 'score', 'author', 'receiver', 'comment', 'is_anon']
 
 
 class HousingSerializer(serializers.ModelSerializer):

@@ -52,12 +52,10 @@ class Housing(models.Model):
 
 
 class Review(models.Model):
-    class Meta:
-        unique_together = ("author", "user")
 
     score = models.IntegerField(choices=utils.amount_score_choices)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='author')
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user')
+    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='receiver')
     comment = models.CharField(max_length=1000)
     date = models.DateField(auto_now=True)
     is_anon = models.BooleanField(default=False)
