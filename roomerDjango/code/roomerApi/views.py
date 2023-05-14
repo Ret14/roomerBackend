@@ -395,6 +395,18 @@ class FollowerViewSet(viewsets.ModelViewSet):
     pagination_class = None
     permission_classes = [permissions.IsAuthenticated]
 
+    @action(methods=['get'], detail=False, permission_classes=[permissions.IsAuthenticated])
+    def check_follower(self, request):
+        user_id = request.query_params.get('user_id')
+        follow_id = request.query_params.get('follow_id')
+        logging.critical(request.query_params)
+        if user_id != '' and follow_id != '':
+            if self.queryset.filter(user_id=user_id, following_id=follow_id):
+                return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     def filter_queryset(self, queryset):
         user_id = self.request.query_params.get('user_id')
         offset = self.request.query_params.get('offset')
