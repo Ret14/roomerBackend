@@ -74,11 +74,21 @@
             "Unable to log in with provided credentials."
         ]
     }
+
 ### Выход из учетной записи пользователя
 #### Запрос:
     curl -X POST \
     http://176.113.83.93:8000/auth/token/logout/ \
     -H 'Authorization: Token c0d68713b6753ea14ac12f9b6ca96df6f4b51457'
+#### Ответ:
+    Response code: 204 No Content
+
+### Удаление пользователя
+#### Запрос:
+    curl -X DELETE \
+    http://176.113.83.93:8000/auth/users/me/ \
+    -H 'Authorization: Token c0d68713b6753ea14ac12f9b6ca96df6f4b51457' \
+    -d 'current_password=some-password'
 #### Ответ:
     Response code: 204 No Content
 
