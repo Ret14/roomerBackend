@@ -73,6 +73,16 @@
             "Unable to log in with provided credentials."
         ]
     }
+
+### Удаление пользователя
+#### Запрос:
+    curl -X DELETE \
+    http://176.113.83.93:8000/auth/users/me/ \
+    -H 'Authorization: Token c0d68713b6753ea14ac12f9b6ca96df6f4b51457' \
+    -d 'current_password=some-password'
+#### Ответ:
+    Response code: 204 No Content
+
 ### Получение информации о текущем авторизованном пользователе
 #### Бизнес постановка:
 Пользователь повторно авторизовался и решил посмотреть информацию своего профиля
