@@ -30,7 +30,7 @@ class Command(BaseCommand):
             self.create_profiles(ratio)
             # self.create_messages(ratio)
             self.create_housings(ratio)
-            self.create_favourites(100)
+            # self.create_favourites(100)
             self.follow_users()
         except Exception:
             models.Interest.objects.all().delete()
@@ -156,7 +156,7 @@ class Command(BaseCommand):
                            housing_type=random.choice(housing_type_choices),
                            sharing_type=random.choice(sharing_type_choices),
                            title=self.fake.text(max_nb_chars=random.randint(50, 150)),
-                           location=' '.join(self.fake.location_on_land())
+                           location=' '.join(self.fake.location_on_land()[2:])
                            )
             for number in range(amount)]
         step = 100
