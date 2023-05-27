@@ -28,7 +28,7 @@ class Command(BaseCommand):
             self.create_cities()
             self.create_housing_photo()
             self.create_profiles(ratio)
-            # self.create_messages(ratio)
+            self.create_messages(ratio)
             self.create_housings(ratio)
             # self.create_favourites(100)
             self.follow_users()
