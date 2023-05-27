@@ -335,6 +335,16 @@ class FavouritesViewSet(viewsets.ModelViewSet):
             return queryset.filter(user_id=user_id)
         return queryset.none()
 
+    @action(methods=['get'], detail=False, permission_classes=[permissions.IsAuthenticated])
+    def check_favourite(self, request):
+        user_id = request.query_params.get('user_id')
+        housing_id = request.query_params.get('housing_id')
+        if user_id != '' and housing_id != '':
+            if self.queryset.filter(user_id=user_id, housing_id=housing_id):
+                return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     def create(self, request, *args, **kwargs):
         user_id = self.request.query_params.get('user_id')
         housing_id = self.request.query_params.get('housing_id')
